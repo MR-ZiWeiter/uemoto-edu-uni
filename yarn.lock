@@ -1032,9 +1032,9 @@
     stricter-htmlparser2 "^3.9.6"
 
 "@dcloudio/uni-mp-360@^2.0.0":
-  version "2.0.0-alpha-32020210730002"
-  resolved "https://registry.yarnpkg.com/@dcloudio/uni-mp-360/-/uni-mp-360-2.0.0-alpha-32020210730002.tgz#4ce646fe3bb24a2d6fbdd871176afd6107bdff69"
-  integrity sha512-fIa7zcO1y9pKrfOdf6Ux4Rb6yR3+QlhGNB4V2vcVi5+mTEJSJvObG/V4JVWj09/6CoPtUc6476ppdkbojfSYvw==
+  version "2.0.0-alpha-32020210801001"
+  resolved "https://registry.yarnpkg.com/@dcloudio/uni-mp-360/-/uni-mp-360-2.0.0-alpha-32020210801001.tgz#e89c5163f252713d2f4c131e7f48b4745cda664f"
+  integrity sha512-aNR+1hu5ila+XVnulrqdn8o4f6dyW8jZe7UAlT4N+SB1rMUqVM8QdVkkVmg+OlDutrQ81tD6xsCJEqCZsUpvZA==
 
 "@dcloudio/uni-mp-alipay@^2.0.0":
   version "2.0.0"

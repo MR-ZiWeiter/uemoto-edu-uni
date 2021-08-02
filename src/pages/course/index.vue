@@ -1,6 +1,24 @@
 <template>
   <view class="course-page">
     <scroll-view scroll-x="true" class="menu-group">
+      <view class="menu-item active">
+        <text class="label-text">英语</text>
+      </view>
+      <view class="menu-item">
+        <text class="label-text">英语</text>
+      </view>
+      <view class="menu-item">
+        <text class="label-text">英语</text>
+      </view>
+      <view class="menu-item">
+        <text class="label-text">英语</text>
+      </view>
+      <view class="menu-item">
+        <text class="label-text">英语</text>
+      </view>
+      <view class="menu-item">
+        <text class="label-text">英语</text>
+      </view>
       <view class="menu-item">
         <text class="label-text">英语</text>
       </view>
@@ -11,10 +29,10 @@
         <text class="label-text">英语</text>
       </view>
     </scroll-view>
-    <view class="search-group">
+    <!-- <view class="search-group">
       <image class="search-icon" src="course-search-icon-01@2x.svg"></image>
       <text class="label-text">热门课程 TOP</text>
-    </view>
+    </view> -->
     <view class="swiper-group">
       <swiper
         class="swiper-info"
@@ -22,7 +40,7 @@
         autoplay
         circular>
         <swiper-item class="swiper-item-info">
-          <image src="/" mode="scaleToFill"/>
+          <image src="/" class="image-info" mode="scaleToFill"/>
         </swiper-item>
       </swiper>
     </view>
