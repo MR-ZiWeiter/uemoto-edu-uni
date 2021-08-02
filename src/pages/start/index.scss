@@ -1,0 +1,62 @@
+.start-page {
+  @include wh(100%, 100%);
+  @include flex-justify-align(flex-start, flex-start);
+  background: $default_color;
+  @include bis('#{$static-host-url}/statics/images/pages/start/start-page-bg@2x.png');
+  flex-direction: column;
+  overflow: hidden;
+  /* #ifdef MP-ALIPAY */
+  position: fixed;
+  /* #endif */
+  .custom-header {
+    @include wh(100%, auto);
+  }
+  .custom-header-left {
+    @include wh(format(62), format(62));
+    margin-top: var(--status-bar-height);
+    position: absolute;
+    left: format(24);
+    top: format(12);
+    border-radius: 50%;
+  }
+  .custom-header-logo {
+    @include wh(format(130), auto);
+  }
+  .logo-image {
+    @include wh(format(358), format(188));
+    margin: 24% auto;
+    object-fit: contain;
+  }
+  .wechat-btn {
+    @include click-active();
+    @include wh(format(670), format(96));
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    bottom: 9%;
+    left: 50%;
+    transform: translateX(-50%);
+    .wechat-btn-image {
+      @include wh(format(670), format(96));
+    }
+  }
+  .wx-btn{
+    @include flex-justify-align(center);
+    height: format(96);
+  }
+  .accountBtn{
+    bottom: 18%;
+    @include sc(format(34),$default_color);
+    font-weight: bold;
+  }
+  .content {
+    @include wh(100%, auto);
+    flex: 1;
+  }
+  .wxIcon{
+    @include wh(format(52), format(52));
+  }
+  .wx-txt{
+    @include sc(format(34),$default_color);
+  }
+}

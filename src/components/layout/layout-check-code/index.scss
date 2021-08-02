@@ -1,0 +1,63 @@
+$default_color_1: #999999;
+$default_color_2: #F4F4F4;
+$default_color_3: #24A4FF;
+$default_color_4: #333333;
+
+.validate-code-component {
+  @include wh(100%, 100%);
+  @include flex-justify-align(center);
+  position: fixed;
+  background-color: rgba(0,0,0,0.3);
+  left: 0;
+  top: 0;
+  pointer-events: auto;
+  .validate-code-container {
+    @include wh(format(512), format(312));
+    @include bgBorderRadius($default_color, format(8));
+    .model-content {
+      padding: 0 format(24);
+      .model-item {
+        @include flex-justify-align(flex-start);
+        border-bottom: 0.5px solid $default_border_color;
+        margin-top: format(62);
+        padding: format(10) 0;
+        .code-input {
+          @include sc(format(32), $default_color_4);
+          flex: 1;
+          &::placeholder {
+            color: $default_color_1;
+          }
+        }
+        .code {
+          @include wh(format(182), format(56));
+        }
+      }
+      .button-group {
+        @include flex-justify-align(space-between);
+        margin-top: format(60);
+        uni-button.button-hover {
+          padding: 0;
+          // border-radius: 0;
+          &::after {
+            background-color: rgba(0,0,0,0.2);
+          }
+        }
+        .custom-btn {
+          @include wh(format(220), format(72));
+          @include flex-justify-align(center, center);
+          overflow: hidden;
+        }
+        .btn-cancel {
+          @include bgBorderRadius($default_color_2, format(8));
+          @include sc(format(34), $default_color_3);
+          --background: $default_color_2;
+        }
+        .btn-confirm {
+          @include bgBorderRadius($default_color_3, format(8));
+          @include sc(format(34), $default_color);
+          --background: $default_color_3;
+        }
+      }
+    }
+  }
+}

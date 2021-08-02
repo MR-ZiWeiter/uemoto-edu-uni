@@ -1,0 +1,13 @@
+.home-swiper-component {
+  @include wh(auto, format(388));
+  padding: 0 format(16);
+  .swiper-container {
+    @include wh(100%, 100%);
+    .swiper-item-sty {
+      @include wh(100%, 100%);
+      .swiper-item-sty-image {
+        @include wh(100%, 100%);
+      }
+    }
+  }
+}

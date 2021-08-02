@@ -1,0 +1,86 @@
+.tabbar {
+  // position: fixed;
+  // left: 0px;
+  // bottom: 0px;
+  flex: 0 0 96rpx;
+  width: 100%;
+  height: 96rpx;
+  z-index: 99999;
+  // padding-top: 35rpx;
+  // background: url("https://weixin.xmzt.cn/statics/mp-weixin/images/background/tabbar_bg.png") no-repeat;
+  // background-size: 100% 100%;
+  background: #fff;
+  display: flex;
+  .authorizationBox {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+  }
+  &::after {
+    content: "";
+    // height:
+  }
+  .bar_list {
+    flex: 1;
+    line-height: 20px;
+    text-align: center;
+    .icon,
+    .lottie {
+      width: 50rpx;
+      height: 50rpx;
+      display: block;
+      padding-top: 6rpx;
+      margin: 0 auto;
+    }
+    span {
+      display: block;
+      font-size: 18rpx;
+      line-height: 26rpx;
+      margin-top: 2rpx;
+      color: #666666;
+    }
+    .active {
+      color: #333333;
+    }
+  }
+  .center_icon {
+    .lottie-box {
+      width: 86rpx;
+      height: 86rpx;
+      transform: translateY(-20rpx);
+      .icon {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+    .customer_lottie {
+      width: 100%;
+      height: 100%;
+    }
+    span {
+      transform: translateY(-17rpx);
+    }
+    .center_box {
+      width: 50rpx;
+      height: 50rpx;
+      display: block;
+      padding-top: 6rpx;
+      margin: 0 auto;
+      position: relative;
+      .icon {
+        position: absolute;
+        width: 86rpx;
+        height: 86rpx;
+        padding-top: 0;
+        left: 50%;
+        bottom: 0;
+        -webkit-transform: translateX(-50%);
+        transform: translateX(-50%);
+      }
+    }
+  }
+}

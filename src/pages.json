@@ -1,0 +1,106 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		// {
+		// 	"path": "pages/start/index",
+		// 	"style": {
+		// 		"navigationBarTitleText": "上本教育"
+		// 	}
+		// },
+		{
+			"path": "pages/home/index",
+			"style": {
+				"navigationBarTitleText": "首页"
+			}
+		},
+		{
+			"path": "pages/course/index",
+			"style": {
+				"navigationBarTitleText": "首页"
+			}
+		}
+	],
+	/* 分包 */
+	"subPackages": [
+		{
+			"root": "pagesA",
+			"pages": [
+				{
+					"path": "school-info/index",
+					"style": {
+						"navigationBarTitleText": "学校详情"
+					}
+				},
+				{
+					"path": "notification-list/index",
+					"style": {
+						"navigationBarTitleText": "公告列表"
+					}
+				},
+				{
+					"path": "news-list/index",
+					"style": {
+						"navigationBarTitleText": "资讯列表"
+					}
+				},
+				{
+					"path": "news-list/detail",
+					"style": {
+						"navigationBarTitleText": "资讯详情"
+					}
+				}
+			]
+		}
+	],
+	/* 分包预加载 */
+	"preloadRule": {
+		/* "pages/start/index": {
+      "network": "all",
+      "packages": [
+        "__APP__"
+      ]
+    }, */
+	},
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "中国体育彩票",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8",
+		"navigationStyle": "custom",
+		"transparentTitle": "always",
+		"titlePenetrate": "YES",
+		"allowsBounceVertical": "NO",
+		"gestureBack": "NO",
+		"defaultTitle": "",
+		"enableComponentOverlayer": "YES",
+		"enableInPageRenderInput": "YES"
+	},
+	"tabBar": {
+		"color": "#3D4655",
+		"selectedColor": "#1D65E3",
+		"backgroundColor": "#ffffff",
+		"list": [
+			{
+				"pagePath": "pages/home/index",
+				"text": "首页",
+				"iconPath": "/static/images/toolsbar/public-toolsbar-icon-01@2x.png",
+				"selectedIconPath": "/static/images/toolsbar/public-toolsbar-icon-01-check@2x.png"
+			},
+			{
+				"pagePath": "pages/course/index",
+				"text": "课程",
+				"iconPath": "/static/images/toolsbar/public-toolsbar-icon-02@2x.png",
+				"selectedIconPath": "/static/images/toolsbar/public-toolsbar-icon-02-check@2x.png"
+			}
+		]
+	},
+	/* 正则导入全局超集组件 */
+	"easycom": {
+		"autoscan": false,
+		"custom": {
+			"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue",
+			"custom-(.*)": "@/components/public/custom-$1/index.vue",
+			"layout-(.*)": "@/components/layout/layout-$1/index.vue",
+			"uni-(.*)": "@/components/plugins/uni-$1/uni-$1.vue"
+		}
+	}
+}

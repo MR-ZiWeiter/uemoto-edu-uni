@@ -1,0 +1,25 @@
+<!-- <box layout="horizontal">
+  <box class="callout-style-tyep-1 AF-COMPONENT-OVERLAYER">
+    <cover-image class="image-bg" :src="imageUrlToHostChange('/statics/images/public/min-icon/public-map-icon-label-bg@2x.png')"></cover-image>
+    <cover-image class="icon-run" :src="imageUrlToHostChange('/statics/images/public/min-icon/public-map-icon-label-run@2x.png')"></cover-image>
+    <text class="label-text">{{currentMarkerInfo.duration}}分钟</text>
+    <text class="label-text">|</text>
+    <text class="label-text">{{currentMarkerInfo.distance}}m</text>
+    <cover-image @click.stop="openOtherAppNavigate" class="icon-navigate" :src="imageUrlToHostChange('/statics/images/public/min-icon/public-map-icon-label-navigate@2x.png')"></cover-image>
+  </box>
+</box> -->
+
+<box layout='vertical' background-color='${bgColor}'>
+  <text text='${title}' font-size='16' color='#FFFFFF'/>
+  <box layout='horizontal'>
+    <text id='dh' clickable='true' text='导航' color='#FFFFFF' 
+          padding-left='8' padding-right='8' font-size='16' 
+          border-radius='6' background-color='#1591CF'/>
+    <text id='xc' clickable='true' text='相册' color='#FFFFFF' 
+          padding-left='8' padding-right='8' font-size='16' 
+          border-radius='6' background-color='#1591CF'/>
+    <text id='wxt' clickable='true' text='卫星图' color='#FFFFFF' 
+          padding-left='8' padding-right='8' font-size='16'
+          border-radius='6' background-color='#1591CF'/>
+  </box>
+</box>

@@ -1,0 +1,13 @@
+.course-page {
+  @include wh(100%, 100%);
+  @include flex-justify-align(flex-start, flex-start);
+  flex-direction: column;
+  overflow: hidden;
+  .menu-group {
+    flex: 0 0 format(88);
+    @include wh(100%, format(88));
+  }
+  .hot-course-info {
+    @include wh(100%, format(198));
+  }
+}

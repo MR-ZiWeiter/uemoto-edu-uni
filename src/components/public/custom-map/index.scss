@@ -1,0 +1,81 @@
+.custom-map-component {
+  @include wh(100%, 100%);
+  position: relative;
+  .custom-map-container {
+    @include wh(100%, 100%);
+    position: relative;
+    z-index: 9;
+    .custom-map {
+      @include wh(100%, 100%);
+      @include allcover();
+      z-index: 9;
+      ::v-deep {
+        .callout-style-tyep-1 {
+          // @include bis('#{$static-host-url}/statics/images/public/min-icon/public-map-icon-label-bg@2x.png');
+          @include flex-justify-align(space-around, center);
+          @include wh(format(264), format(72));
+          padding-bottom: format(20);
+          padding-left: format(26);
+          padding-right: format(26);
+          transform: translateY(format(10));
+          position: relative;
+          .image-bg {
+            @include wh(100%, 100%);
+            position: absolute;
+            top: 0;
+            left: 0;
+          }
+          .icon-run {
+            @include wh(format(20), format(28));
+            position: relative;
+            z-index: 5;
+          }
+          .label-text {
+            @include sc(format(24), $default_color_3);
+            position: relative;
+            z-index: 5;
+          }
+          .icon-navigate {
+            @include wh(format(23), format(23));
+            position: relative;
+            z-index: 5;
+          }
+        }
+        // public-map-icon-label-bg@2x.png
+      }
+    }
+    .center-marker {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%, 0);
+      z-index: 9;
+      .location-marker-icon {
+        @include wh(format(54), format(71));
+      }
+    }
+    .custom-map-other {
+      @include wh(100%, auto);
+      @include flex-justify-align(flex-start, flex-start);
+      flex-direction: column;
+      padding-bottom: var(--window-bottom);
+      position: absolute;
+      bottom: 0;
+      z-index: 999;
+      .custom-map-tools {
+        position: absolute;
+        right: 0;
+        top: 0;
+        transform: translateY(-100%);
+        z-index: 99;
+      }
+    }
+  }
+  .custom-map-banner {
+    @include wh(0, 0);
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 99;
+  }
+}

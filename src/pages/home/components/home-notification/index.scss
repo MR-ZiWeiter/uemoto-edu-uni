@@ -1,0 +1,35 @@
+.home-notification-component {
+  @include wh(format(706), format(110));
+  border-radius: format(110);
+  background-color: rgba(240, 240, 240, 100);
+  margin: 0 auto;
+  margin-top: format(40);
+  .notification-info {
+    @include wh(auto, 100%);
+    @include flex-justify-align(space-between, center);
+    padding: 0 format(16) 0 format(30);
+    .label-group {
+      @include flex-justify-align(flex-start, center);
+      .notification-icon {
+        @include wh(format(38), format(38));
+        margin-right: format(12);
+      }
+      .title-text {
+        @include sc(format(28), $default_color_3);
+        @include overflow-text(1);
+        width: format(500);
+        justify-items: flex-start;
+      }
+    }
+    .ready-more {
+      @include flex-justify-align(center, center);
+      .label-text {
+        @include sc(format(28), $default_color_3);
+      }
+      .more-icon {
+        @include wh(format(48), format(48));
+      }
+    }
+
+  }
+}
