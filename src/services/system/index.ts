@@ -97,6 +97,15 @@ export class SystemService {
     }
   }
 
+  public createToast({title, icon, mask, duration}: UniApp.ShowToastOptions = {title: '提示', icon: 'none', mask: true, duration: 2000}) {
+    uni.showToast({
+      title,
+      icon,
+      mask,
+      duration
+    })
+  }
+
   // 获取地址
   public getLocation(callback: (latLng: LMapPointCoordsArrayModel) => void) {
     /* #ifdef H5 */

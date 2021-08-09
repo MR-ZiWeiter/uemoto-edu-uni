@@ -8,14 +8,17 @@ interface IAccountVuexModel {
 }
 
 // 获取历史记录
-const locationAppWechatService = uni.getStorageSync('appWechatService') || {}
+const locationAppWechatService = uni.getStorageSync('appWechatService') || {};
+const locationAppVipUserInfo = uni.getStorageSync('appVipUserInfo') || {};
 
 export default {
   state: {
-    wechatInfo: locationAppWechatService
+    wechatInfo: locationAppWechatService,
+    vipUserInfo: locationAppVipUserInfo
   },
   getters: {
-    wechatInfo: (state: IAccountVuexModel) => state.wechatInfo
+    wechatInfo: (state: IAccountVuexModel) => state.wechatInfo,
+    vipUserInfo: (state: IAccountVuexModel) => state.vipUserInfo
   },
   mutations: {
     UPDATE_WECHAT_INFO(state: IAccountVuexModel, info: any) {
@@ -25,6 +28,14 @@ export default {
         state.wechatInfo = Object.assign({}, state.wechatInfo, info.value);
       }
       uni.setStorageSync('appWechatService', state.wechatInfo)
+    },
+    UPDATE_VIP_USERINFO(state: IAccountVuexModel, info: any) {
+      if (info.deep) {
+        state.vipUserInfo = info.value
+      } else {
+        state.vipUserInfo = Object.assign({}, state.vipUserInfo, info.value);
+      }
+      uni.setStorageSync('appVipUserInfo', state.vipUserInfo)
     }
   },
   actions: {
@@ -174,6 +185,25 @@ export default {
           }
         })
       })
+    },
+    // 获取用户会员信息
+    async asyncAccountUserInfo({commit, dispatch}: any, info: any) {
+      return await new Promise((resolve, reject) => {
+        new Vue.HttpRequest({
+          url: '/members/memberInfo',
+          method: 'POST',
+          data: info,
+          success: (res: ApiResponseModel) => {
+            commit('UPDATE_VIP_USERINFO', res.DATA);
+            resolve(res)
+          },
+          fail: (err: any) => {
+            // console.log(err)
+            reject({ status: false, err })
+          }
+        })
+      })
+      
     }
   },
   modules: {}

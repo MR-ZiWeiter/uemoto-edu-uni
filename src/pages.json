@@ -15,7 +15,13 @@
 		{
 			"path": "pages/course/index",
 			"style": {
-				"navigationBarTitleText": "首页"
+				"navigationBarTitleText": "课程"
+			}
+		},
+		{
+			"path": "pages/user/index",
+			"style": {
+				"navigationBarTitleText": "我的"
 			}
 		}
 	],
@@ -49,6 +55,82 @@
 					}
 				}
 			]
+		},
+		{
+			"root": "pagesB",
+			"pages": [
+				{
+					"path": "course-info/index",
+					"style": {
+						"navigationBarTitleText": "课程详情"
+					}
+				},
+				{
+					"path": "teacher-info/index",
+					"style": {
+						"navigationBarTitleText": "老师详情"
+					}
+				},
+				{
+					"path": "reserve-info/index",
+					"style": {
+						"navigationBarTitleText": "预约体验"
+					}
+				}
+			]
+		},
+		{
+			"root": "pagesC",
+			"pages": [
+				{
+					"path": "recharge/index",
+					"style": {
+						"navigationBarTitleText": "余额充值"
+					}
+				},
+				{
+					"path": "gift-pack/index",
+					"style": {
+						"navigationBarTitleText": "我的礼包"
+					}
+				},
+				{
+					"path": "funding/index",
+					"style": {
+						"navigationBarTitleText": "资金明细"
+					}
+				},
+				{
+					"path": "customer-source/index",
+					"style": {
+						"navigationBarTitleText": "我的客源"
+					}
+				},
+				{
+					"path": "consumption/index",
+					"style": {
+						"navigationBarTitleText": "消费明细"
+					}
+				},
+				{
+					"path": "complete-material/index",
+					"style": {
+						"navigationBarTitleText": "完善资料"
+					}
+				},
+				{
+					"path": "dividends/index",
+					"style": {
+						"navigationBarTitleText": "我的分红"
+					}
+				},
+				{
+					"path": "dividends/withdraw",
+					"style": {
+						"navigationBarTitleText": "提现"
+					}
+				}
+			]
 		}
 	],
 	/* 分包预加载 */
@@ -62,7 +144,7 @@
 	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "中国体育彩票",
+		"navigationBarTitleText": "上本教育",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8",
 		"navigationStyle": "custom",
@@ -90,6 +172,12 @@
 				"text": "课程",
 				"iconPath": "/static/images/toolsbar/public-toolsbar-icon-02@2x.png",
 				"selectedIconPath": "/static/images/toolsbar/public-toolsbar-icon-02-check@2x.png"
+			},
+			{
+				"pagePath": "pages/user/index",
+				"text": "我的",
+				"iconPath": "/static/images/toolsbar/public-toolsbar-icon-03@2x.png",
+				"selectedIconPath": "/static/images/toolsbar/public-toolsbar-icon-03-check@2x.png"
 			}
 		]
 	},

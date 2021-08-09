@@ -3,18 +3,20 @@
     <view class="home-course-context">
       <view class="title-info">
         <text class="title-text">热门课程</text>
-        <view class="ready-more">
+        <view class="ready-more" @click="openCoursePage()">
           <text class="label-text">更多</text>
           <image class="more-icon" :src="$CoreTools.imageUrlToHostChange('/statics/svgs/home/home-arrow-icon@2x.svg')"></image>
         </view>
       </view>
       <scroll-view scroll-x="true">
         <view class="home-course-content">
-          <view class="home-course-item" v-for="item in renderInfo" :key="item.id">
-            <image class="news-image" :src="item.imagePath"></image>
-            <text class="label-text">{{item.name}}</text>
-            <text class="value-text">{{item.introduction}}</text>
-          </view>
+          <block v-for="item in renderInfo" :key="item.id">
+            <view class="home-course-item" @click="openCourseDetialPage(item)">
+              <image class="news-image" :src="item.imagePath"></image>
+              <text class="label-text">{{item.name}}</text>
+              <text class="value-text">{{item.introduction}}</text>
+            </view>
+          </block>
         </view>
       </scroll-view>
     </view>
@@ -45,6 +47,20 @@ export default class HomeCourseComponent extends Vue {
     this.asyncFetchHotProductListInfo().then(res => {
       // console.log(res)
       this.renderInfo = res.DATA.rows;
+    })
+  }
+
+  public openCourseDetialPage(info: any) {
+    console.log(info);
+    this.$navigateModel.navigateTo({
+      url: '/pagesB/course-info/index',
+      query: {id: info.productNo}
+    })
+  }
+
+  public openCoursePage() {
+    this.$navigateModel.navigateTo({
+      url: '/pages/course/index'
     })
   }
 }

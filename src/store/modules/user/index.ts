@@ -10,6 +10,14 @@ import apiConfig, { apiConfigClass } from '@/config'
 
 // 账户信息
 import AccountModel from './modules/account'
+// 充值模块
+import RechargeModel from './modules/recharge'
+// 分红模块
+import DividendModel from './modules/dividend'
+// 客源模块
+import CustomerSourceModel from './modules/customer-source'
+// 优惠券模块
+import CouponModel from './modules/coupon'
 
 // 获取历史记录
 const locationAppUserBasicInfoService = uni.getStorageSync('appUserBasicService') || {}
@@ -122,6 +130,10 @@ export default {
     /* #endif */
   },
   modules: {
-    AccountModel
+    AccountModel,
+    RechargeModel,
+    DividendModel,
+    CustomerSourceModel,
+    CouponModel
   }
 }

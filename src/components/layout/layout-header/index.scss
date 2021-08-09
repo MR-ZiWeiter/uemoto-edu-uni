@@ -19,6 +19,10 @@
     .public-left-icon {
       @include wh(format(20), format(36));
       margin: format(26) format(38);
+      margin-right: format(15);
+    }
+    .label-text {
+      font-size: format(34);
     }
   }
   .public-title-text {

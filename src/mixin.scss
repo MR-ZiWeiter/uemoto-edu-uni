@@ -1,5 +1,5 @@
 /* 静态资源变量HOST */
-$static-host-url: "http://localhost:3210";
+$static-host-url: "http://127.0.0.1:3210/uemoto-edu-uni/src";
 
 // 变量设置
 $default_color: #ffffff;
@@ -50,6 +50,10 @@ $fontFamilys: DIN;
   background-image: url($url);
   background-repeat: no-repeat;
   background-size: 100% 100%;
+}
+
+@mixin bimage($url) {
+  background-image: url(#{$static-host-url}#{$url});
 }
 
 @mixin borderRadius($radius) {

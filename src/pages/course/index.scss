@@ -3,11 +3,14 @@
   @include flex-justify-align(flex-start, flex-start);
   flex-direction: column;
   overflow: hidden;
+  background: $default_color;
   .menu-group {
     flex: 0 0 format(88);
     @include wh(100%, format(88));
     @include flex-justify-align(flex-start, flex-start);
-    overflow: hidden;
+    transition: all ease 0.5s;
+    overflow-y: hidden;
+    overflow-x: auto;
     /* #ifdef H5 */
     ::v-deep .uni-scroll-view-content {
       @include flex-justify-align(flex-start, flex-start);
@@ -18,6 +21,7 @@
       @include wh(auto, 100%);
       @include flex-justify-align(center, center);
       @include sc(format(34), #3D4655);
+      display: inline-flex;
       flex: 0 0 format(104);
       transition: all ease 0.5s;
       &.active {
@@ -35,7 +39,7 @@
         @include wh(100%, 100%);
         border-radius: format(16);
         .image-info {
-          @include wh(100%, auto);
+          @include wh(100%, 100%);
           object-fit: contain;
         }
       }
@@ -45,7 +49,9 @@
     flex: 0 0 format(96);
     @include wh(100%, format(96));
     @include flex-justify-align(flex-start, flex-start);
-    overflow: hidden;
+    overflow-y: hidden;
+    overflow-x: auto;
+    margin-top: format(30);
     /* #ifdef H5 */
     ::v-deep .uni-scroll-view-content {
       @include flex-justify-align(flex-start, flex-start);
@@ -56,7 +62,10 @@
       @include wh(auto, 100%);
       @include flex-justify-align(center, center);
       @include sc(format(34), #3D4655);
-      flex: 0 0 format(104);
+      // margin-top: format(30);
+      // display: inline-flex;
+      flex: 0 0 format(124);
+      // padding: 0 format(20);
       transition: all ease 0.5s;
       position: relative;
       &.active {
@@ -66,11 +75,19 @@
           content: '';
           @include wh(format(68), format(6));
           background-color: #1D65E3;
+          position: absolute;
+          bottom: 0;
         }
       }
     }
   }
-  .hot-course-info {
-    @include wh(100%, format(198));
+  .hot-course-context {
+    @include wh(100%, auto);
+    margin-top: format(30);
+    .hot-course-info {
+      @include wh(calc(100% - #{format(60)}), format(198));
+      padding: 0 format(30);
+      margin-bottom: format(30);
+    }
   }
 }

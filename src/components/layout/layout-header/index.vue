@@ -10,6 +10,7 @@
       <block v-else>
         <view class="public-left-slot" @tap.prevent.stop="handlerLeftEvent" :style="[{top: systemInfo.statusBarHeight + 'px'}]" v-if="isBack">
           <image class="public-left-icon" :src="renderLeftIcon"></image>
+          <text class="label-text" :style="[{color: navigateColor}]">返回</text>
         </view>
       </block>
       <block v-if="customCenter">
