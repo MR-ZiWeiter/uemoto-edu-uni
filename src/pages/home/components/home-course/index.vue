@@ -10,13 +10,11 @@
       </view>
       <scroll-view scroll-x="true">
         <view class="home-course-content">
-          <block v-for="item in renderInfo" :key="item.id">
-            <view class="home-course-item" @click="openCourseDetialPage(item)">
-              <image class="news-image" :src="item.imagePath"></image>
-              <text class="label-text">{{item.name}}</text>
-              <text class="value-text">{{item.introduction}}</text>
-            </view>
-          </block>
+          <view v-for="(item, index) in renderInfo" :key="item.id" class="home-course-item" @click="openCourseDetialPage(index)">
+            <image class="news-image" :src="item.imagePath"></image>
+            <text class="label-text">{{item.name}}</text>
+            <text class="value-text">{{item.introduction}}</text>
+          </view>
         </view>
       </scroll-view>
     </view>
@@ -25,7 +23,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Component } from 'vue-property-decorator'
+import { Component } from 'vue-property-decorator';
 import { mapActions } from 'vuex';
 @Component({
   methods: {
@@ -50,11 +48,10 @@ export default class HomeCourseComponent extends Vue {
     })
   }
 
-  public openCourseDetialPage(info: any) {
-    console.log(info);
+  public openCourseDetialPage(index: any) {
     this.$navigateModel.navigateTo({
       url: '/pagesB/course-info/index',
-      query: {id: info.productNo}
+      query: {id: this.renderInfo[index].productNo}
     })
   }
 
@@ -110,6 +107,7 @@ export default class HomeCourseComponent extends Vue {
           .label-text {
             @include overflow-text(1);
             @include sc(format(28), $default_color_1);
+            margin-top: format(16);
           }
           .value-text {
             @include overflow-text(2);

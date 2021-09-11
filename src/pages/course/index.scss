@@ -2,7 +2,8 @@
   @include wh(100%, 100%);
   @include flex-justify-align(flex-start, flex-start);
   flex-direction: column;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   background: $default_color;
   .menu-group {
     flex: 0 0 format(88);

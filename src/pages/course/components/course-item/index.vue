@@ -1,7 +1,7 @@
 <!--
  * @Author: houli
  * @Date: 2021-08-07 10:39:49
- * @LastEditTime: 2021-08-08 12:37:34
+ * @LastEditTime: 2021-08-23 01:06:06
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /uemoto-edu-uni/src/pages/course/components/course-item/index.vue
@@ -89,6 +89,7 @@ export default class CourseItemComponent extends Vue {
       flex-direction: column;
       flex: 1;
       position: relative;
+      margin-left: format(30);
       &::before {
         content: '';
         @include wh(100%, format(2));

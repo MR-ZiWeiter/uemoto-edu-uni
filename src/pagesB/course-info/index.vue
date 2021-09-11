@@ -1,7 +1,7 @@
 <!--
  * @Author: houli
  * @Date: 2021-08-07 15:13:05
- * @LastEditTime: 2021-08-08 13:18:34
+ * @LastEditTime: 2021-08-23 01:20:52
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /uemoto-edu-uni/src/pagesB/course-info/index.vue
@@ -22,21 +22,21 @@
           <view class="course-infos-header">
             <view class="course-infos-header-item">
               <view class="label-info">
-                <image class="min-icon" src=""/>
+                <image class="min-icon" :src="$CoreTools.imageUrlToHostChange('/statics/svgs/course/course-info-icon-01@2x.svg')"/>
                 <text class="label-value">课程次数</text>
               </view>
               <text class="value-text">{{renderInfo.courseNumber}}节</text>
             </view>
             <view class="course-infos-header-item">
               <view class="label-info">
-                <image class="min-icon" src=""/>
+                <image class="min-icon" :src="$CoreTools.imageUrlToHostChange('/statics/svgs/course/course-info-icon-02@2x.svg')"/>
                 <text class="label-value">课程时长</text>
               </view>
               <text class="value-text light">{{renderInfo.courseDuration}}分钟/节</text>
             </view>
             <view class="course-infos-header-item">
               <view class="label-info">
-                <image class="min-icon" src=""/>
+                <image class="min-icon" :src="$CoreTools.imageUrlToHostChange('/statics/svgs/course/course-info-icon-03@2x.svg')"/>
                 <text class="label-value">授课年级</text>
               </view>
               <text class="value-text">{{renderInfo.courseTarget}}</text>
@@ -76,11 +76,11 @@
     </scroll-view>
     <view class="contact-info">
       <view class="contact-us">
-        <image class="contact-us-image" src=""/>
+        <image class="contact-us-image" :src="$CoreTools.imageUrlToHostChange('/statics/svgs/course/course-phone-icon-01@2x.svg')"/>
         <text class="contact-us-text">联系我们</text>
       </view>
       <view class="contact-us" @click.stop="openReservePage()">
-        <image class="contact-us-image" src=""/>
+        <image class="contact-us-image" :src="$CoreTools.imageUrlToHostChange('/statics/svgs/course/course-time-icon-01@2x.svg')"/>
         <text class="contact-us-text">预约体验</text>
       </view>
     </view>
@@ -135,7 +135,7 @@ export default class CourseInfoPage extends Vue {
   .course-info-page {
     @include wh(100%, 100%);
     @include flex-justify-align(flex-start, flex-start);
-    background-color: $default_color_9;
+    background-color: $default_color;
     flex-direction: column;
     .custom-header {
       width: 100%;
@@ -145,19 +145,30 @@ export default class CourseInfoPage extends Vue {
       @include flex-justify-align(flex-start, flex-start);
       background-size: contain;
       background-repeat: no-repeat;
-      background-color: $default_color_9;
+      // background-color: $default_color_9;
       flex-direction: column;
       overflow: hidden;
+      position: relative;
       .content-box {
         @include wh(100%, auto);
-        margin-top: format(494);
-        background: $default_color_9;
+        margin-top: format(354);
+        // background: $default_color_9;
         border-radius: format(16) format(16) 0 0;
+        &::before {
+          @include wh(100%, 100%);
+          background-color: rgba(0,0,0,0.6);
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
         .course-top {
           @include wh(calc(100% - #{format(96)}), format(140));
           @include flex-justify-align(center, flex-start);
           flex-direction: column;
           padding: 0 format(48);
+          position: relative;
+          z-index: 99;
           .title-text {
             @include sc(format(32), $default_color);
             font-weight: bold;
@@ -198,6 +209,8 @@ export default class CourseInfoPage extends Vue {
           border-radius: format(32) format(32) 0 0;
           background: $default_color;
           padding: format(100) 0;
+          position: relative;
+          z-index: 99;
           .course-infos-header {
             @include wh(100%, auto);
             @include flex-justify-align(center, flex-start);

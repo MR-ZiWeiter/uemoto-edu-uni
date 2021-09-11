@@ -100,6 +100,7 @@ export default class HomeNewsComponent extends Vue {
           .label-text {
             @include overflow-text(1);
             @include sc(format(28), $default_color_1);
+            margin-top: format(16);
           }
           .value-text {
             @include overflow-text(1);

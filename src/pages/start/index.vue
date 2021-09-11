@@ -1,3 +1,11 @@
+<!--
+ * @Author: your name
+ * @Date: 2021-08-07 10:39:49
+ * @LastEditTime: 2021-08-23 01:28:11
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: /uemoto-edu-uni/src/pages/start/index.vue
+-->
 <template>
   <view class="start-page">
     <image
@@ -65,6 +73,23 @@ export default class HomePage extends Vue {
 
   /* 登录 */
   public openLoginEvent(e: { detail: { errMsg: string } }) {
+    uni.getUserProfile({
+      desc: '获取您的昵称，头像，地区及性别',
+      // provider: result.provider[0],
+      // withCredentials: true,
+      success: ({ userInfo, rawData, signature, encryptedData, iv, errMsg }) => {
+        // console.log(userInfo, rawData, signature, encryptedData, iv, errMsg)
+        if (errMsg === 'getUserProfile:ok') {
+          this.asyncAccountMinLogin({
+            userInfo,
+            encryptedData,
+            iv
+          }).then(res => {
+            console.log(res);
+          });
+        }
+      },
+    })
     if (e.detail.errMsg === "getUserInfo:ok") {
       console.log(e.detail)
       this.asyncAccountMinLogin(e.detail)

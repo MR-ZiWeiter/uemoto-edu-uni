@@ -1,7 +1,7 @@
 <!--
  * @Author: houli
  * @Date: 2021-08-08 12:42:45
- * @LastEditTime: 2021-08-09 04:52:12
+ * @LastEditTime: 2021-08-23 01:23:04
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /uemoto-edu-uni/src/pages/user/index.vue
@@ -114,7 +114,7 @@ export default class ReserveInfoPage extends Vue {
       value: '',
       icon: '/statics/svgs/user/user-menu-04@2x.svg',
       url: '',
-      event: ''
+      event: 'onShareFirend'
     }
   ];
 
@@ -168,7 +168,32 @@ export default class ReserveInfoPage extends Vue {
       this.$navigateModel.navigateTo({
         url: info.url
       })
+    } else {
+      this[info.event]();
     }
+  }
+
+  // 分享
+  private onShareFirend() {
+    uni.getProvider({
+      service: 'share',
+      success: ({ service, provider }) => {
+        uni.share({
+          provider: provider[0],
+          title: '送给您价值599元的学习大礼包！',
+          href: '/pages/home/index',
+          imageUrl: '',
+          success: (result) => {
+            console.log(result);
+          },
+          fail: (error) => {
+            console.log(error);
+          }
+        })
+      },
+      fail: (error) => {}
+    })
+    
   }
 }
 

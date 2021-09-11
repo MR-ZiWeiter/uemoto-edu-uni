@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-07 10:39:49
- * @LastEditTime: 2021-08-08 14:24:06
+ * @LastEditTime: 2021-08-09 17:48:56
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /uemoto-edu-uni/src/config/index.ts
@@ -9,8 +9,8 @@
 const apiConfig: PApiConfigModel = {
   apiBaseUrl: 'http://120.76.132.146:8888',
   // apiBaseUrl: '',
-  staticUrl: 'http://127.0.0.1:3210/uemoto-edu-uni/src',
-  // staticUrl: '',
+  // staticUrl: 'http://127.0.0.1:3210/uemoto-edu-uni/src',
+  staticUrl: 'http://120.76.132.146:8888',
   tencentKey: 'xxx',
   amapKey: 'xxxx',
   /* 微信小程序APPID */
