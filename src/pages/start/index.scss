@@ -2,7 +2,7 @@
   @include wh(100%, 100%);
   @include flex-justify-align(flex-start, flex-start);
   background: $default_color;
-  @include bis('#{$static-host-url}/statics/images/pages/start/start-page-bg@2x.png');
+  // @include bis('#{$static-host-url}/statics/images/pages/start/start-page-bg@2x.png');
   flex-direction: column;
   overflow: hidden;
   /* #ifdef MP-ALIPAY */
@@ -24,6 +24,7 @@
   }
   .logo-image {
     @include wh(format(358), format(188));
+    background-color: rgba(0,0,0,0.2);
     margin: 24% auto;
     object-fit: contain;
   }
@@ -36,13 +37,20 @@
     bottom: 9%;
     left: 50%;
     transform: translateX(-50%);
+    &::after {
+      display: none;
+    }
     .wechat-btn-image {
       @include wh(format(670), format(96));
     }
   }
   .wx-btn{
     @include flex-justify-align(center);
+    background-color: #FF9800;
     height: format(96);
+    &::after {
+      display: none;
+    }
   }
   .accountBtn{
     bottom: 18%;
@@ -55,8 +63,10 @@
   }
   .wxIcon{
     @include wh(format(52), format(52));
+    background-color: rgba(0,0,0,0.2);
   }
   .wx-txt{
     @include sc(format(34),$default_color);
+    margin-left: format(16);
   }
 }

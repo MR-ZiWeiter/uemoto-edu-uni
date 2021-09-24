@@ -9,7 +9,7 @@
 <template>
   <view class="start-page">
     <image
-      class="logo-image" :src="imageUrlToHostChange('/statics/images/pages/start/start-page-logo@2x.png')"></image>
+      class="logo-image" :src="imageUrlToHostChange('/statics/images/pages/start/start-page-logo@2x.png')" alt="logo"></image>
     <button
       class="wechat-btn"
       open-type="getUserInfo"
@@ -80,6 +80,7 @@ export default class HomePage extends Vue {
       if (options && options.isShare) {
         this.asyncPostInReceiveCouponBag(options).then(res => {
           this.toolsService.customToast('领取成功');
+          uni.removeStorageSync('can-pack-info');
           setTimeout(() => {
             this.$navigateModel.reLaunch({
               url: '/pages/home/index'
@@ -111,6 +112,7 @@ export default class HomePage extends Vue {
       // console.log(res);
       this.asyncPostInReceiveCouponBag(uni.getStorageSync('can-pack-info')).then(res => {
         this.toolsService.customToast('领取成功');
+        uni.removeStorageSync('can-pack-info');
         console.log('领取成功~');
       });
     });
