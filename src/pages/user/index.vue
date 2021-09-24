@@ -35,14 +35,14 @@
           </view>
         </view>
         <view class="vip-info">
-          <view :class="['vip-info-text', renderInfo.isShareHolder ? 'vip' : '']">
+          <view :class="['vip-info-text', (renderInfo.isShareHolder === '01') ? 'vip' : '']">
             <text class="label-text">VIP</text>
-            <text class="value-text" v-if="renderInfo.isShareHolder">股东会员 {{renderInfo.memberCode}}</text>
+            <text class="value-text" v-if="(renderInfo.isShareHolder === '01')">股东会员 {{renderInfo.memberCode}}</text>
             <text class="value-text" v-else>普通会员 {{renderInfo.memberCode}}</text>
           </view>
           <view class="price-group">
             <text class="price-mout">余额：{{renderInfo.balance || 0}}</text>
-            <text class="price-integral">积分：0</text>
+            <!-- <text class="price-integral">积分：0</text> -->
             <text class="price-other"></text>
           </view>
         </view>
@@ -50,10 +50,10 @@
           <text class="title-text">常用工具</text>
           <view class="menu-group">
             <block v-for="menu in menuUtils" :key="menu.icon">
-              <view class="menu-item" @click.stop="onOpenMenuEvent(menu)" v-if="!menu.isVIP || menu.isVIP && renderInfo.isShareHolder">
+              <button class="menu-item" @click.stop="onOpenMenuEvent(menu)" :open-type="menu.event === 'onShareFirend' ? 'share': ''" v-if="!menu.isVIP || menu.isVIP && (renderInfo.isShareHolder === '01')">
                 <image :src="$CoreTools.imageUrlToHostChange(menu.icon)" class="menu-item-icon" />
                 <text class="label-text">{{menu.label}}</text>
-              </view>
+              </button>
             </block>
           </view>
         </view>
@@ -61,7 +61,7 @@
           <text class="title-text">我的服务</text>
           <view class="menu-group">
             <block v-for="menu in menuServices" :key="menu.icon">
-              <view class="menu-item" @click.stop="onOpenMenuEvent(menu)" v-if="!menu.isVIP || menu.isVIP && renderInfo.isShareHolder">
+              <view class="menu-item" @click.stop="onOpenMenuEvent(menu)" v-if="!menu.isVIP || menu.isVIP && (renderInfo.isShareHolder === '01')">
                 <image :src="$CoreTools.imageUrlToHostChange(menu.icon)" class="menu-item-icon" />
                 <text class="label-text">{{menu.label}}</text>
               </view>
@@ -107,8 +107,8 @@ export default class ReserveInfoPage extends Vue {
       label: '我的礼包',
       value: '',
       icon: '/statics/svgs/user/user-menu-03@2x.svg',
-      url: '/pagesC/gift-pack/index',
-      event: ''
+      url: '',
+      event: 'onOpenPackEvent'
     },{
       label: '分享好友',
       value: '',
@@ -156,6 +156,21 @@ export default class ReserveInfoPage extends Vue {
     this.onRenderInfo();
   }
 
+  // 设置分享
+  onShareAppMessage(res: { from: string; target: any; }) {
+    if (res.from === 'button') {// 来自页面内分享按钮
+      console.log(res.target)
+      return {
+        title: '共享教育',
+        path: '/pages/start/index'
+      }
+    }
+    return {
+      title: '共享教育',
+      path: '/pages/start/index'
+    }
+  }
+
   private onRenderInfo() {
     this.asyncAccountUserInfo().then(res => {
       this.renderInfo = res.DATA;
@@ -170,6 +185,19 @@ export default class ReserveInfoPage extends Vue {
       })
     } else {
       this[info.event]();
+    }
+  }
+
+  // 打开礼包
+  public onOpenPackEvent() {
+    if (this.renderInfo.isShareHolder === '01') {
+      this.$navigateModel.navigateTo({
+        url: '/pagesC/gift-pack/index?type=vip-share'
+      })
+    } else {
+      this.$navigateModel.navigateTo({
+        url: '/pagesC/gift-pack/index'
+      })
     }
   }
 
@@ -345,6 +373,10 @@ export default class ReserveInfoPage extends Vue {
               @include wh(100%, 100%);
               @include flex-justify-align(center, center);
               flex-direction: column;
+              background: none;
+              &::after {
+                display: none;
+              }
               .menu-item-icon {
                 @include wh(format(56), format(56));
               }

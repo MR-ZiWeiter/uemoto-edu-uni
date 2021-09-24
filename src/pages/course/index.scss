@@ -18,6 +18,8 @@
       padding: 0 format(20);
     }
     /* #endif */
+    margin-right: format(200);
+    width: calc(100% - #{format(200)});
     .menu-item {
       @include wh(auto, 100%);
       @include flex-justify-align(center, center);

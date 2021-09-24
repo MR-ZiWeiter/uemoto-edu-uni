@@ -40,7 +40,7 @@ export default {
   },
   actions: {
     // 小程序用户登录操作
-    async asyncAccountMinLogin({ commit, dispatch }: any, info?: any) {
+    async asyncAccountMinLogin_({ commit, dispatch }: any, info?: any) {
       return new Promise((resolve, reject) => {
         // 更新微信/支付宝用户信息
         info && commit('UPDATA_WX_USERINFO', info.userInfo)
@@ -129,62 +129,164 @@ export default {
         })
       })
     },
-    // 小程序用户授权手机号码操作
-    async asyncAccountUserBindPhone({ commit, dispatch }: any, info: any) {
+    // 小程序用户登录操作
+    async asyncAccountMinLogin({ commit, dispatch }: any) {
       return new Promise((resolve, reject) => {
+        let code: string;
         // 用户登录操作
-        let platform: string;
-        /* #ifdef MP-WEIXIN */
-        platform = 'wx'
-        /* #endif */
-        /* #ifdef MP-ALIPAY */
-        platform = 'ali'
-        /* #endif */
-        /* #ifdef H5 */
-        platform = 'h5'
-        /* #endif */
-        new Vue.HttpRequest({
-          url: `/xmdd-user/${platform}/user/phone`,
-          method: 'GET',
-          data: { ...info },
-          success: (res: any) => {
-            /* 更新TOKEN */
-            res.rel.token && commit('UPDATA_ANTHOR_TOKEN', res.rel.token)
-            // 异步更新权限
-            dispatch('asyncFetchAuthorInfo')
-            // 异步更新用户信息
-            dispatch('asyncFetchUserBasicInfo')
-            resolve({ status: true, res })
+        uni.login({
+          /* #ifdef MP-ALIPAY */
+          scopes: ['auth_base', 'auth_user', 'auth_zhima'],
+          /* #endif */
+          success: response => {
+            console.log(response);
+            if (response.errMsg === 'login:ok') {
+              code = response.code;
+              /* #ifdef MP-ALIPAY */
+              uni.getProvider({
+                service: 'oauth',
+                success: (result) => {
+                  if (result.errMsg === 'getProvider:ok') {
+                    uni.getUserInfo({
+                      provider: result.provider[0],
+                      withCredentials: true,
+                      success: ({ userInfo, rawData, signature, encryptedData, iv, errMsg }) => {
+                        // 更新微信/支付宝用户信息
+                        userInfo && commit('UPDATA_WX_USERINFO', userInfo);
+                        // console.log(response)
+                        let platform: string;
+                        /* #ifdef MP-WEIXIN */
+                        platform = 'miniapp';
+                        /* #endif */
+                        /* #ifdef MP-ALIPAY */
+                        platform = 'ali';
+                        /* #endif */
+                        /* #ifdef H5 */
+                        platform = 'h5';
+                        /* #endif */
+                        new Vue.HttpRequest({
+                          url: `/login`,
+                          method: 'POST',
+                          data: {
+                            iv,
+                            encryptedData,
+                            code
+                          },
+                          success: ({ DATA, msg }: ApiResponseModel) => {
+                            const failTime = new Date().getTime() + 7 * 24 * 60 * 60 * 1000
+                            // 异步更新权限
+                            dispatch('asyncFetchAuthorInfo')
+                            // 更新token
+                            commit('UPDATA_ANTHOR_TOKEN', DATA.token)
+                            // 更新token失效时间
+                            commit('UPDATA_APP_STATUS', { loginEndTime: failTime })
+                            /* 更新用户信息 */
+                            commit('UPDATA_USER_BASIC_INFO', {
+                              deep: true,
+                              value: DATA.userInfo
+                            })
+                            // 存储token时间
+                            uni.setStorageSync('loginEndTime', failTime)
+                            uni.reLaunch({
+                              url: '/pages/home/index'
+                            })
+                            resolve({ status: true, res: DATA });
+                          },
+                          fail: (err: any) => {
+                            console.log(err);
+                            reject({ status: false, err });
+                          }
+                        });
+                      },
+                      fail: (error) => {
+                        new Error(error);
+                        uni.showToast({
+                          title: '您已取消授权',
+                          icon: 'none',
+                          mask: true
+                        });
+                      }
+                    });
+                  }
+                }
+              });
+              /* #endif */
+            }
           },
-          fail: (err: any) => {
-            // console.log(err)
-            reject({ status: false, err })
+          fail: (err) => {
+            reject({ status: false, err });
           }
-        })
-      })
-    },
-    /* 小程序一键授权手机号绑定账户 */
-    async asyncAccountUserPhoneBindInfo({ commit, dispatch }: any, info: any) {
-      return new Promise((resolve, reject) => {
-        new Vue.HttpRequest({
-          url: apiConfigClass.center_db_api_host,
-          method: 'POST',
-          data: apiToolsModel.post(AccountEnum.AxABAD, info),
-          success: (res: ApiResponseModel) => {
-            console.log(res)
-            // this.asyncAccountMinLogin();
-            dispatch('asyncAccountMinLogin')
-            // commit('UPDATA_ANTHOR_TOKEN', res.rel)
-            // 异步更新用户信息
-            // dispatch('asyncFetchUserBasicInfo')
-            resolve(res)
+        });
+        // #ifdef MP-WEIXIN
+        uni.getUserProfile && uni.getUserProfile({
+          desc: '获取您的昵称，头像，地区及性别',
+          // provider: result.provider[0],
+          // withCredentials: true,
+          success: ({ userInfo, rawData, signature, encryptedData, iv, errMsg }) => {
+            // console.log(userInfo, rawData, signature, encryptedData, iv, errMsg)
+            if (errMsg === 'getUserProfile:ok') {
+              // 更新微信/支付宝用户信息
+              userInfo && commit('UPDATA_WX_USERINFO', userInfo);
+              // console.log(response)
+              let platform: string;
+              /* #ifdef MP-WEIXIN */
+              platform = 'miniapp';
+              /* #endif */
+              /* #ifdef MP-ALIPAY */
+              platform = 'ali';
+              /* #endif */
+              /* #ifdef H5 */
+              platform = 'h5';
+              /* #endif */
+              new Vue.HttpRequest({
+                url: `/login`,
+                method: 'POST',
+                data: {
+                  iv,
+                  encryptedData,
+                  code
+                },
+                success: ({ DATA, msg }: ApiResponseModel) => {
+                  const failTime = new Date().getTime() + 7 * 24 * 60 * 60 * 1000
+                  // 异步更新权限
+                  dispatch('asyncFetchAuthorInfo')
+                  // 更新token
+                  commit('UPDATA_ANTHOR_TOKEN', DATA.token)
+                  // 更新token失效时间
+                  commit('UPDATA_APP_STATUS', { loginEndTime: failTime })
+                  /* 更新用户信息 */
+                  commit('UPDATA_USER_BASIC_INFO', {
+                    deep: true,
+                    value: DATA.userInfo
+                  })
+                  // 存储token时间
+                  uni.setStorageSync('loginEndTime', failTime)
+                  uni.reLaunch({
+                    url: '/pages/home/index'
+                  })
+                  resolve({ status: true, res: DATA });
+                },
+                fail: (err: any) => {
+                  console.log(err);
+                  reject({ status: false, err });
+                }
+              });
+            } else {
+              console.log('取消登录', 'backLogin');
+              uni.reLaunch({ url: '/pages/start/index' });
+            }
           },
-          fail: (err: any) => {
-            console.log(err)
-            reject(err)
+          fail: (error) => {
+            new Error(error);
+            uni.showToast({
+              title: '您已取消授权',
+              icon: 'none',
+              mask: true
+            });
           }
-        })
-      })
+        });
+        // #endif
+      });
     },
     // 获取用户会员信息
     async asyncAccountUserInfo({commit, dispatch}: any, info: any) {
@@ -204,6 +306,24 @@ export default {
         })
       })
       
+    },
+    // 完善我的信息
+    async asyncAccountPutUserInfo({ commit, dispatch }: any, info: any) {
+      // /members/completeInformation
+      return await new Promise((resolve, reject) => {
+        new Vue.HttpRequest({
+          url: '/members/completeInformation',
+          method: 'POST',
+          data: info,
+          success: (res: ApiResponseModel) => {
+            resolve(res)
+          },
+          fail: (err: any) => {
+            // console.log(err)
+            reject({ status: false, err })
+          }
+        })
+      })
     }
   },
   modules: {}

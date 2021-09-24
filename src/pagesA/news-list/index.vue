@@ -4,7 +4,7 @@
     <scroll-view class="context" scroll-y="true">
       <view class="content-box">
         <view class="news-item" v-for="(item, index) in renderInfo" :key="index" @click="openNewsInfoPage(item)">
-          <image class="news-image" :src="item.image"></image>
+          <image class="news-image" :src="item.image" mode="aspectFill"></image>
           <view class="news-item-info">
             <text class="title-text">{{item.title}}</text>
             <text class="value-text">{{item.description}}</text>
@@ -47,7 +47,7 @@ export default class HomeNewsListPage extends Vue {
   public openNewsInfoPage(info: any) {
     this.$navigateModel.navigateTo({
       url: '/pagesA/news-list/detail',
-      query: info
+      query: {id: info.id, type: 'asyncFetchHomeNewsDetailInfo'}
     })
   }
 }
@@ -64,6 +64,7 @@ export default class HomeNewsListPage extends Vue {
     .context {
       @include wh(100%, auto);
       @include flex-justify-align(flex-start, flex-start);
+      flex: 1;
       background-size: contain;
       background-repeat: no-repeat;
       background-color: $default_border_color;
@@ -82,6 +83,7 @@ export default class HomeNewsListPage extends Vue {
             @include wh(format(264), format(198));
             flex: 0 0 format(198);
             border-radius: format(16);
+            object-fit: contain;
           }
           .news-item-info {
             @include flex-justify-align(flex-start, flex-start);

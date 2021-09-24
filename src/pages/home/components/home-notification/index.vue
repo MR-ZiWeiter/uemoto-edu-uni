@@ -1,8 +1,8 @@
 <template>
   <view class="home-notification-component">
     <view class="notification-info">
-      <view class="label-group">
-        <image class="notification-icon" :src="$CoreTools.imageUrlToHostChange('/statics/svgs/home/home-notification-icon@2x.svg')" mode="widthFix"/>
+      <view class="label-group" @click="openNotiInfoPage()">
+        <image class="notification-icon" :src="$CoreTools.imageUrlToHostChange('/statics/svgs/home/home-notification-icon@2x.svg')" mode="aspectFill"/>
         <rich-text class="title-text" :nodes="renderInfo.description"></rich-text>
       </view>
       <view class="ready-more" @click="openNotificationPage()">
@@ -44,6 +44,15 @@ export default class HomeNotificationComponent extends Vue {
   public openNotificationPage() {
     this.$navigateModel.navigateTo({
       url: '/pagesA/notification-list/index'
+    })
+  }
+
+  public openNotiInfoPage() {
+    // this.$navigateModel
+    // asyncFetchHomeNotiDetailInfo
+    this.$navigateModel.navigateTo({
+      url: '/pagesA/notification-list/detail',
+      query: {id: this.renderInfo.id, type: 'asyncFetchHomeNotiDetailInfo'}
     })
   }
 }

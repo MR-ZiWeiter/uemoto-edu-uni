@@ -29,7 +29,7 @@
           <view class="divident-btn" @click="openWithdrawPage()">提现</view>
         </view>
         <view class="current-group">
-          <view class="current-item" @click.stop="openNavigatePage(menu)" v-for="menu in navigateGroup" :key="menu.value">
+          <view class="current-item" @click.stop="openNavigatePage(menu)" v-for="(menu, index) in navigateGroup" :key="index">
             <text class="label-text">{{menu.label}}</text>
             <image :src="$CoreTools.imageUrlToHostChange('/statics/svgs/home/home-arrow-icon@2x.svg')" class="arrow-icon" />
           </view>

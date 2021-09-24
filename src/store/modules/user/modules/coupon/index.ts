@@ -14,7 +14,7 @@ export default {
   getters: {},
   mutations: {},
   actions: {
-    // 获取我的客源
+    // 获取股东会员卡包
     async asyncFetchCouponListInfo({commit, dispatch}: any, info: any) {
       return await new Promise((resolve, reject) => {
         new Vue.HttpRequest({
@@ -30,7 +30,41 @@ export default {
           }
         })
       })
-    }
+    },
+    // 普通人获取卡包
+    async asyncFetchOdyCouponListInfo({commit, dispatch}: any, info: any) {
+      return await new Promise((resolve, reject) => {
+        new Vue.HttpRequest({
+          url: '/couponBag/info/userCouponDetails',
+          method: 'POST',
+          data: info,
+          success: (res: ApiResponseModel) => {
+            resolve(res)
+          },
+          fail: (err: any) => {
+            // console.log(err)
+            reject({ status: false, err })
+          }
+        })
+      })
+    },
+    // 领取卡包
+    async asyncPostInReceiveCouponBag({commit, dispatch}: any, info: any) {
+      return await new Promise((resolve, reject) => {
+        new Vue.HttpRequest({
+          url: '/members/receiveCouponBag',
+          method: 'POST',
+          data: info,
+          success: (res: ApiResponseModel) => {
+            resolve(res)
+          },
+          fail: (err: any) => {
+            // console.log(err)
+            reject({ status: false, err })
+          }
+        })
+      })
+    },
   },
   modules: {
   }

@@ -5,13 +5,13 @@
         <text class="title-text">热门课程</text>
         <view class="ready-more" @click="openCoursePage()">
           <text class="label-text">更多</text>
-          <image class="more-icon" :src="$CoreTools.imageUrlToHostChange('/statics/svgs/home/home-arrow-icon@2x.svg')"></image>
+          <image class="more-icon" :src="$CoreTools.imageUrlToHostChange('/statics/svgs/home/home-arrow-icon@2x.svg')" mode="aspectFill"></image>
         </view>
       </view>
       <scroll-view scroll-x="true">
         <view class="home-course-content">
-          <view v-for="(item, index) in renderInfo" :key="item.id" class="home-course-item" @click="openCourseDetialPage(index)">
-            <image class="news-image" :src="item.imagePath"></image>
+          <view v-for="(item, index) in renderInfo" :key="index" class="home-course-item" @click="openCourseDetialPage(item)">
+            <image class="news-image" :src="item.imagePath" mode="aspectFill"></image>
             <text class="label-text">{{item.name}}</text>
             <text class="value-text">{{item.introduction}}</text>
           </view>
@@ -48,10 +48,10 @@ export default class HomeCourseComponent extends Vue {
     })
   }
 
-  public openCourseDetialPage(index: any) {
+  public openCourseDetialPage(info: any) {
     this.$navigateModel.navigateTo({
       url: '/pagesB/course-info/index',
-      query: {id: this.renderInfo[index].productNo}
+      query: {id: info.productNo}
     })
   }
 

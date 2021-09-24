@@ -22,18 +22,20 @@ import { mapActions } from 'vuex';
 @Component({
   methods: {
     ...mapActions({
-      asyncFetchHomeInstitutionInfo: 'asyncFetchHomeInstitutionInfo'
+      asyncFetchHomeInstitutionInfo: 'asyncFetchHomeInstitutionInfo',
+      asyncFetchHomeNewsDetailInfo: 'asyncFetchHomeNewsDetailInfo'
     })
   }
 })
 export default class HomeSchoolInfoPage extends Vue {
-  public title: string = '咨询详情';
+  public title: string = '咨讯详情';
   public renderInfo: any = {};
 
   // @Prop({ default: [] }) public renderInfo: Array<any>;
 
   // vuex
   private asyncFetchHomeInstitutionInfo: () => Promise<ApiResponseModel>;
+  private asyncFetchHomeNewsDetailInfo: () => Promise<ApiResponseModel>;
 
   // 初始化
   mounted() {
@@ -43,9 +45,18 @@ export default class HomeSchoolInfoPage extends Vue {
     // })
   }
 
+
   onLoad(options: any) {
     this.title = options.title;
     this.renderInfo = options;
+    // if (opt) {}
+    this.onRenderInfo(options.type, options);
+  }
+
+  private onRenderInfo(eventName: string, options: any) {
+    this[eventName](options).then((res: { DATA: any; }) => {
+      this.renderInfo = res.DATA;
+    })
   }
 }
 </script>
@@ -67,6 +78,7 @@ export default class HomeSchoolInfoPage extends Vue {
       background-color: $default_color;
       flex-direction: column;
       overflow: hidden;
+      flex: 1;
       .content-box {
         @include wh(100%, auto);
         margin-top: format(494);

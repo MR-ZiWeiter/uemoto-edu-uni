@@ -116,17 +116,37 @@ class httpRequestPlugin extends CoreToolsFunction {
             // _self.login(backpage, backtype)
             // 重新授权登录
             console.log('需要登录')
-            uni.showModal({
-              title: '提示',
-              content: '用户验证失败，是否重新登录',
-              success: function(res) {
-                if (res.confirm) {
-                  store.dispatch('wechatLogin')
-                } else if (res.cancel) {
-                  console.log('用户点击取消')
+            // uni.showModal({
+            //   title: '提示',
+            //   content: '用户验证失败，是否重新登录',
+            //   success: function(res) {
+            //     if (res.confirm) {
+            //       store.dispatch('unifyLogin')
+            //     } else if (res.cancel) {
+            //       console.log('用户点击取消')
+            //     }
+            //   }
+            // })
+            // 关掉其他的 避免地狱调（官方不支持）存个变量跳过
+            if (!uni.getStorageSync('reload_model')) {
+              uni.setStorageSync('reload_model', true);
+              // 登陆
+              uni.showModal({
+                title: '提示',
+                content: '用户验证失败，是否重新登录',
+                success: function(res) {
+                  uni.setStorageSync('reload_model', false);
+                  if (res.confirm) {
+                    store.dispatch('unifyLogin')
+                  } else if (res.cancel) {
+                    console.log('用户点击取消')
+                    uni.reLaunch({
+                      url: '/pages/start/login/index'
+                    })
+                  }
                 }
-              }
-            })
+              })
+            }
             // 暂时回调错误
             // tslint:disable-next-line: no-unused-expression
             typeof param.fail === 'function' && param.fail(response.data)
@@ -141,7 +161,7 @@ class httpRequestPlugin extends CoreToolsFunction {
               content: '当前用户未登陆，请登陆后操作',
               success: function(res) {
                 if (res.confirm) {
-                  store.dispatch('wechatLogin')
+                  store.dispatch('unifyLogin')
                   // uni.reLaunch({
                   //   url: '/pages/start/index'
                   // })
@@ -172,7 +192,7 @@ class httpRequestPlugin extends CoreToolsFunction {
                   uni.navigateTo({
                     url: '/pages/start/bind-account/index'
                   })
-                  // store.dispatch('wechatLogin')
+                  // store.dispatch('unifyLogin')
                 } else if (res.cancel) {
                   console.log('用户点击取消')
                 }
@@ -195,9 +215,13 @@ class httpRequestPlugin extends CoreToolsFunction {
             return
           }
           if (response.data.CODE !== '00') {
-            uni.showModal({
-              showCancel: false,
-              content: '' + response.data.MSG
+            // uni.showModal({
+            //   showCancel: false,
+            //   content: '' + response.data.MSG
+            // })
+            uni.showToast({
+              title: `提示：${response.data.MSG}`,
+              icon: 'none'
             })
             // 暂时回调错误
             // tslint:disable-next-line: no-unused-expression
@@ -211,9 +235,13 @@ class httpRequestPlugin extends CoreToolsFunction {
         } else if (response.data.status === 0) { /* 处理腾讯相关API接口返回数据问题 */
           typeof param.success === 'function' && param.success(response.data)
         } else { /* 抛出通用错误 */
-          uni.showModal({
-            showCancel: false,
-            content: 'No ResultCode:' + response.data.MSG
+          // uni.showModal({
+          //   showCancel: false,
+          //   content: 'No ResultCode:' + response.data.MSG
+          // })
+          uni.showToast({
+            title: `提示：${response.data.MSG}`,
+            icon: 'none'
           })
           return
         }
@@ -222,11 +250,18 @@ class httpRequestPlugin extends CoreToolsFunction {
       },
       fail: (e: any) => {
         console.log('网络请求fail:' + JSON.stringify(e))
-        uni.showModal({
-          content: '' + e.MSG
+        // uni.showModal({
+        //   content: '' + e.MSG
+        // })
+        uni.showToast({
+          title: `提示：${e.MSG}`,
+          icon: 'none',
         })
-        // tslint:disable-next-line: no-unused-expression
-        typeof param.fail === 'function' && param.fail(e.data)
+        setTimeout(() => {
+          // 暂时回调错误
+          // tslint:disable-next-line: no-unused-expression
+          typeof param.fail === 'function' && param.fail(e.data)
+        }, 1500);
       },
       complete: () => {
         console.log('网络请求complete')

@@ -146,7 +146,7 @@ export default {
       UPDATA_APP_STATUS: 'UPDATA_APP_STATUS'
     }),
     ...mapActions({
-      wechatLogin: 'wechatLogin',
+      unifyLogin: 'unifyLogin',
       asyncAccountMinLogin: 'asyncAccountMinLogin',
       asyncFetchCurrentPageUrl: 'asyncFetchCurrentPageUrl',
       asyncFetchAuthorInfoCheckToKey: 'asyncFetchAuthorInfoCheckToKey',
@@ -171,7 +171,7 @@ export default {
             url: info.uri
           })
         } else {
-          this.wechatLogin()
+          this.unifyLogin()
         }
         /* #endif */
         /* #ifdef MP-WEIXIN */

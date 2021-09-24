@@ -13,7 +13,7 @@
       <view class="content-box">
         <view class="recharge-header">
           <text class="label-text">余额（元）</text>
-          <text class="value-text">{{renderInfo.availableDividend}}</text>
+          <text class="value-text">{{renderInfo.availableAccountBalance}}</text>
         </view>
         <view class="recharge-input">
           <text class="label-text">充值金额（元）</text>
@@ -93,6 +93,7 @@ export default class RechargePage extends Vue {
   public asyncPostRechargeInfo: (info?: any) => Promise<ApiResponseModel>;
 
   onLoad(options: any) {
+    this.fetchRechargeInfo();
   }
 
   // 获取当前账户金额

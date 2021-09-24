@@ -227,6 +227,7 @@ export default class CourseInfoPage extends Vue {
                 }
                 .label-value {
                   @include sc(format(28), #3D4655);
+                  margin-left: format(18);
                 }
               }
               .value-text {

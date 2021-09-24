@@ -5,14 +5,16 @@
       indicator-dots
       autoplay
       circular>
-      <swiper-item class="swiper-item-sty" v-for="item in renderInfo" :key="item.sort">
-        <image class="swiper-item-sty-image" mode="widthFix" :src="item.url"></image>
+      <swiper-item @click="openBannerPage(item)" class="swiper-item-sty" v-for="(item, index) in renderInfo" :key="index">
+        <image class="swiper-item-sty-image" mode="aspectFill" :src="item.url"></image>
       </swiper-item>
     </swiper>
   </view>
 </template>
 
 <script lang="ts">
+import { SystemService } from '@/services/system';
+import { WebviewService } from '@/services/webview';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { mapActions } from 'vuex';
@@ -29,6 +31,8 @@ export default class HomeSwiperComponent extends Vue {
 
   // @Prop({ default: [] }) public renderInfo: Array<any>;
 
+  private webviewService = new WebviewService();
+
   // vuex
   private asyncFetchHomeBannerInfo: () => Promise<ApiResponseModel>;
 
@@ -38,6 +42,10 @@ export default class HomeSwiperComponent extends Vue {
       // console.log(res)
       this.renderInfo = res.DATA;
     })
+  }
+
+  public openBannerPage(info: any) {
+    this.webviewService.openWebviewByUrl(info.url);
   }
 }
 </script>

@@ -7,7 +7,7 @@
 				<view v-for="(item,index) in options" :key="index" class="flex uni-tab__cart-button-left uni-tab__shop-cart" @click="onClick(index,item)">
 					<view class="uni-tab__icon">
 						<uni-icons :type="item.icon" size="20" color="#646566"></uni-icons>
-						<!-- <image class="image" :src="item.icon" mode="widthFix" /> -->
+						<!-- <image class="image" :src="item.icon" mode="aspectFill" /> -->
 					</view>
 					<text class="uni-tab__text">{{ item.text }}</text>
 					<view class="flex uni-tab__dot-box">

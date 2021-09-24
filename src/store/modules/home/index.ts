@@ -56,6 +56,23 @@ export default {
         })
       })
     },
+    // 公告详情 
+    async asyncFetchHomeNotiDetailInfo({commit, dispatch}: any, info: any) {
+      return await new Promise((resolve, reject) => {
+        new Vue.HttpRequest({
+          url: '/homePage/announcementDetail',
+          method: 'POST',
+          data: info,
+          success: (res: ApiResponseModel) => {
+            resolve(res)
+          },
+          fail: (err: any) => {
+            // console.log(err)
+            reject({ status: false, err })
+          }
+        })
+      })
+    },
     // 首页新闻资讯
     async asyncFetchHomeNewsInfo({commit, dispatch}: any, info: any) {
       return await new Promise((resolve, reject) => {
@@ -89,7 +106,24 @@ export default {
           }
         })
       })
-    }
+    },
+    // 资讯详情 
+    async asyncFetchHomeNewsDetailInfo({commit, dispatch}: any, info: any) {
+      return await new Promise((resolve, reject) => {
+        new Vue.HttpRequest({
+          url: '/homePage/newsDetail',
+          method: 'POST',
+          data: info,
+          success: (res: ApiResponseModel) => {
+            resolve(res)
+          },
+          fail: (err: any) => {
+            // console.log(err)
+            reject({ status: false, err })
+          }
+        })
+      })
+    },
   },
   modules: {
   }

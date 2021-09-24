@@ -42,7 +42,7 @@ export default {
     // 更新微信用户数据
     UPDATA_WX_USERINFO(state: VUXUserModel, info: VUXWXUserInfoModel) {
       state.wxUserInfo = info
-      uni.setStorageSync('appUserBasicService', info)
+      uni.setStorageSync('appWxUserInfoService', info)
     },
     /* 用户基本信息 */
     UPDATA_USER_BASIC_INFO(state: VUXUserModel, info: VUXUserBasicInfoModel) {
@@ -51,7 +51,7 @@ export default {
       } else {
         state.userBasicInfo = Object.assign({}, state.userBasicInfo, info.value)
       }
-      uni.setStorageSync('appWxUserInfoService', state.userBasicInfo)
+      uni.setStorageSync('appUserBasicService', state.userBasicInfo)
     },
     /* 账户信息 */
     UPDATA_ACCOUNT_INFO(state: VUXUserModel, info: VUXUserAccountInfoModel) {
@@ -76,23 +76,23 @@ export default {
     // 用户基本信息
     async asyncFetchUserBasicInfo({ commit }: any, info: any) {
       return new Promise((resolve, reject) => {
-        // new Vue.HttpRequest({
-        //   url: '/',
-        //   method: 'POST',
-        //   data: info,
-        //   success: (res: ApiResponseModel) => {
-        //     console.log(res)
-        //     commit('UPDATA_USER_BASIC_INFO', {
-        //       deep: false,
-        //       value: res.rel
-        //     })
-        //     resolve(res)
-        //   },
-        //   fail: (err: any) => {
-        //     console.log(err)
-        //     reject(err)
-        //   }
-        // })
+        new Vue.HttpRequest({
+          url: '/members/memberInfo',
+          method: 'POST',
+          data: info,
+          success: (res: ApiResponseModel) => {
+            console.log(res)
+            commit('UPDATA_USER_BASIC_INFO', {
+              deep: false,
+              value: res.DATA
+            })
+            resolve(res)
+          },
+          fail: (err: any) => {
+            console.log(err)
+            reject(err)
+          }
+        })
       })
     },
     /* #ifdef MP-WEIXIN */

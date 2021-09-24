@@ -1,11 +1,11 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-		// {
-		// 	"path": "pages/start/index",
-		// 	"style": {
-		// 		"navigationBarTitleText": "上本教育"
-		// 	}
-		// },
+		{
+			"path": "pages/start/index",
+			"style": {
+				"navigationBarTitleText": "上本教育"
+			}
+		},
 		{
 			"path": "pages/home/index",
 			"style": {
@@ -53,6 +53,12 @@
 					"style": {
 						"navigationBarTitleText": "资讯详情"
 					}
+				},
+				{
+					"path": "notification-list/detail",
+					"style": {
+						"navigationBarTitleText": "公告详情"
+					}
 				}
 			]
 		},
@@ -82,6 +88,12 @@
 		{
 			"root": "pagesC",
 			"pages": [
+				{
+					"path": "preview/webview/index",
+					"style": {
+						"navigationBarTitleText": "加载中..."
+					}
+				},
 				{
 					"path": "recharge/index",
 					"style": {

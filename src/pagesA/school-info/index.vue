@@ -115,7 +115,7 @@ export default class HomeSchoolInfoPage extends Vue {
       overflow: hidden;
       .content-box {
         @include wh(100%, auto);
-        margin-top: format(494);
+        margin-top: format(370);
         background: $default_color;
         border-radius: format(16) format(16) 0 0;
         >.title-info {

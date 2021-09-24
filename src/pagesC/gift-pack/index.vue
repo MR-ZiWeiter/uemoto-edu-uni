@@ -16,30 +16,37 @@
           <text class="label-text" v-else>{{renderInfo.description}}</text>
         </view>
         <view class="gift-pack-card">
-          <image :src="renderInfo.imageUrl || $CoreTools.imageUrlToHostChange('/statics/images/user/user-gift-pack-card@2x.png')"  class="gift-pack-card-image"/>
+          <image :src="renderInfo.imageUrl || $CoreTools.imageUrlToHostChange('/statics/images/user/user-gift-pack-card@2x.png')" @error="onImageError" class="gift-pack-card-image"/>
         </view>
         <view v-if="isShare" class="end-timer">
           <text class="label-text">剩余 {{renderInfo.couponBagCount}}/{{renderInfo.useCount}} 截止 {{renderInfo.expireTime}}</text>
         </view>
-        <view class="tab-group">
+        <view class="tab-group" v-if="!isShare">
           <view :class="['tab-item', typeSelect === '01' ? 'active' : '']" @click="typeSelect = '01'">优惠券礼包</view>
-          <view :class="['tab-item', typeSelect === '02' ? 'active' : '']" @click="typeSelect = '02'">商户介绍</view>
+          <!-- <view :class="['tab-item', typeSelect === '02' ? 'active' : '']" @click="typeSelect = '02'">商户介绍</view> -->
         </view>
-        <view class="pack-group">
-          <view class="pack-item" v-for="item in renderInfo.couponItems" :key="item.id">
-            <image :src="item.couponInfo.imageUrl" class="min-icon" />
+        <view class="pack-group" v-if="typeSelect === '01'">
+          <view class="pack-item" v-for="(item, index) in renderInfo.couponItems" :key="index">
+            <image :src="item.couponInfo.imageUrl || item.imageUrl" class="min-icon" />
             <view class="pack-item-info">
-              <text class="title-text">{{item.couponInfo.title}}</text>
-              <text class="label-text">满{{item.couponInfo.discountMinimumConsume}}元可用</text>
-              <text class="label-text">{{item.couponInfo.expireDay}}天后到期</text>
+              <text class="title-text">{{item.couponInfo.title || item.title}}</text>
+              <text class="label-text">满{{item.couponInfo.discountMinimumConsume || item.discountMinimumConsume}}元可用</text>
+              <text class="label-text" v-if="item.couponInfo.expireDay">{{item.couponInfo.expireDay}}天后到期</text>
+              <text class="label-text" v-else>{{item.expireDate}}前使用</text>
             </view>
           </view>
-          <view class="content-null" v-if="renderInfo.couponItems || !renderInfo.couponItems.length">
+          <view class="content-null" v-if="!renderInfo.couponItems && !renderInfo.couponItems.length">
             <text class="label-text">暂无数据</text>
           </view>
         </view>
-        <view class="btn-share">
-          <view class="label-text">立即分享</view>
+        <view class="pack-info" v-if="typeSelect === '02'">
+          
+        </view>
+        <view class="btn-share" v-if="isShare">
+          <button class="label-text" open-type="share">立即分享</button>
+        </view>
+        <view class="btn-in" v-if="!isShare && renderInfo.couponItems">
+          <view class="label-text" @click="openCourse()">立即使用</view>
         </view>
       </view>
     </scroll-view>
@@ -48,6 +55,7 @@
 
 <script lang="ts">
 import { SystemService } from '@/services/system';
+import { ToolsService } from '@/services/tools';
 import Vue from 'vue';
 import { Component, Watch, } from 'vue-property-decorator';
 import { mapActions, mapGetters } from 'vuex';
@@ -59,13 +67,16 @@ import { mapActions, mapGetters } from 'vuex';
   },
   methods: {
     ...mapActions({
-      asyncFetchCouponListInfo: 'asyncFetchCouponListInfo'
+      asyncFetchCouponListInfo: 'asyncFetchCouponListInfo',
+      asyncFetchOdyCouponListInfo: 'asyncFetchOdyCouponListInfo'
     })
   }
 })
 export default class GiftPackPage extends Vue {
   public title: string = '礼包分享';
-  public renderInfo: any = {};
+  public renderInfo: any = {
+    couponItems: []
+  };
 
   public typeSelect: string = '01';
 
@@ -79,6 +90,12 @@ export default class GiftPackPage extends Vue {
   };
 
   public systemService = new SystemService();
+  public toolsService = new ToolsService();
+
+  public shareConfig = {
+    couponBagId: null,
+    shareHolderUserId: null
+  }
 
   // VUEX
   public userBasicInfo: any;
@@ -86,9 +103,37 @@ export default class GiftPackPage extends Vue {
     // console.log(n);
     if (n) {
       this.renderConfig.userName = n.nickName
+      this.shareConfig.shareHolderUserId = n.userId
     }
   }
   public asyncFetchCouponListInfo: (info?: any) => Promise<ApiResponseModel>;
+  public asyncFetchOdyCouponListInfo: (info?: any) => Promise<ApiResponseModel>;
+
+  // 设置分享
+  onShareAppMessage(res: { from: string; target: any; }) {
+    if (res.from === 'button') {// 来自页面内分享按钮
+      // console.log(res.target)
+      return {
+        title: this.renderInfo.name,
+        imageUrl: this.renderConfig.imageUrl,
+        content: this.renderConfig.description,
+        desc: this.renderConfig.description,
+        query: `isShare=true&couponBagId=${this.shareConfig.couponBagId}&shareHolderUserId=${this.shareConfig.shareHolderUserId}`,
+        path: `/pages/start/index?isShare=true&couponBagId=${this.shareConfig.couponBagId}&shareHolderUserId=${this.shareConfig.shareHolderUserId}`,
+        success: () => {
+          this.toolsService.customToast('分享成功~');
+        }
+      }
+    }
+    return {
+      title: this.renderInfo.name,
+      imageUrl: this.renderConfig.imageUrl,
+      content: this.renderConfig.description,
+      desc: this.renderConfig.description,
+      query: `isShare=true&couponBagId=${this.shareConfig.couponBagId}&shareHolderUserId=${this.shareConfig.shareHolderUserId}`,
+      path: `/pages/start/index?isShare=true&couponBagId=${this.shareConfig.couponBagId}&shareHolderUserId=${this.shareConfig.shareHolderUserId}`
+    }
+  }
 
   onLoad(options: any) {
     // this.renderConfig.productId = options.id;
@@ -101,11 +146,25 @@ export default class GiftPackPage extends Vue {
   }
 
   public onRenderInf() {
-    this.asyncFetchCouponListInfo().then(res => {
-      this.renderInfo = res.DATA;
+    this[this.userBasicInfo.isShareHolder === '01' ? 'asyncFetchCouponListInfo' : 'asyncFetchOdyCouponListInfo']().then(res => {
+      if (this.isShare) {
+        this.renderInfo = res.DATA;
+        this.shareConfig.couponBagId = res.DATA.couponBagId || null;
+      } else {
+        this.renderInfo.couponItems = res.DATA.rows;
+      }
     })
   }
 
+  public onImageError() {
+    this.renderInfo.imageUrl = this.$CoreTools.imageUrlToHostChange('/statics/images/user/user-gift-pack-card@2x.png');
+  }
+
+  public openCourse() {
+    this.$navigateModel.switchTab({
+      url: '/pages/course/index'
+    })
+  }
 }
 
 </script>
@@ -163,7 +222,8 @@ export default class GiftPackPage extends Vue {
           }
         }
         .pack-group {
-          @include flex-justify-align(center, flex-start);
+          @include flex-justify-align(flex-start, center);
+          flex-direction: column;
           transform: translateY(#{format(-100)});
           margin-top: format(26);
           .pack-item {
@@ -205,7 +265,8 @@ export default class GiftPackPage extends Vue {
             }
           }
         }
-        .btn-share {
+        .btn-share,
+        .btn-in {
           @include flex-justify-align(center, center);
           transform: translateY(#{format(-60)});
           .label-text {
@@ -214,6 +275,9 @@ export default class GiftPackPage extends Vue {
             @include sc(format(28), $default_color);
             background-color: #FF9800;
             border-radius: format(80);
+            &::after {
+              display: none;
+            }
           }
         }
         .tab-group {

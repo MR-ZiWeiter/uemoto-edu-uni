@@ -7,7 +7,8 @@ import { ToolsService } from '@/services/tools'
 const toolsService = new ToolsService()
 export default Vue.extend({
   mpType: 'app',
-  onLaunch() {
+  onLaunch(options: any) {
+    console.log(options, '11');
     console.log('App Launch')
     // 获取用户设备信息
     this.asyncFetchSystemInfo()
@@ -15,7 +16,10 @@ export default Vue.extend({
     if (this.token) {
       this.asyncFetchUserBasicInfo()
     } else {
-      this.wechatLogin()
+      // this.unifyLogin()
+      this.$navigateModel.reLaunch({
+        url: '/pages/start/index'
+      });
     }
   },
   onShow() {
@@ -41,7 +45,7 @@ export default Vue.extend({
       asyncFetchAuthorInfo: 'asyncFetchAuthorInfo',
       wxlocationCity: 'wxlocationCity',
       getLocation: 'getLocation',
-      wechatLogin: 'wechatLogin'
+      unifyLogin: 'unifyLogin'
     })
   }
 })

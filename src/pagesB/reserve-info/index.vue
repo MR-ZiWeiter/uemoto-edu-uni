@@ -9,10 +9,10 @@
 <template>
   <view class="reserve-info-page">
     <layout-header navigateColor="#000000" :title="title" class="custom-header"></layout-header>
-    <scroll-view class="context" scroll-y="true" :style="{backgroundImage: `url(${renderInfo.image})`}">
+    <scroll-view class="context" scroll-y="true">
       <view class="content-box">
-        <view class="reserve-header-info">
-          <text class="reserve-text">2020年夏季初三语文教学计划</text>
+        <view class="reserve-header-info" :style="{backgroundImage: `url(${renderInfo.imagePath})`}">
+          <text class="reserve-text">{{renderInfo.name}}</text>
         </view>
         <view class="reserve-information">
           <text class="title-text">预约免费体验课</text>
@@ -38,7 +38,8 @@ import { mapActions, mapGetters } from 'vuex';
   },
   methods: {
     ...mapActions({
-      asyncPostProductReserveInfo: 'asyncPostProductReserveInfo'
+      asyncPostProductReserveInfo: 'asyncPostProductReserveInfo',
+      asyncFetchProductInfo: 'asyncFetchProductInfo'
     })
   }
 })
@@ -64,9 +65,17 @@ export default class ReserveInfoPage extends Vue {
     }
   }
   public asyncPostProductReserveInfo: (info: any) => Promise<ApiResponseModel>;
+  private asyncFetchProductInfo: (info: any) => Promise<ApiResponseModel>;
 
   onLoad(options: any) {
     this.renderConfig.productId = options.id;
+    this.onRenderInfo(options.id)
+  }
+
+  private onRenderInfo(productNo: string) {
+    this.asyncFetchProductInfo({productNo}).then(res => {
+      this.renderInfo = res.DATA;
+    })
   }
 
   public onSubmitInfo() {
@@ -122,6 +131,7 @@ export default class ReserveInfoPage extends Vue {
         border-radius: format(16) format(16) 0 0;
         .reserve-header-info {
           @include wh(calc(100% - #{format(60)}), format(264));
+          background-position: center;
           border-radius: format(16);
           background: $default_color_9;
           position: relative;

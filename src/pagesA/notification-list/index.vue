@@ -3,7 +3,7 @@
     <layout-header navigateColor="#000000" :title="title" class="custom-header"></layout-header>
     <scroll-view class="context" scroll-y="true">
       <view class="content-box">
-        <view class="notification-item" v-for="(item, index) in renderInfo" :key="index">
+        <view class="notification-item" v-for="(item, index) in renderInfo" :key="index" @click="openNotiInfoPage(item)">
           <text class="title-text">{{item.title}}</text>
           <view class="notification-item-info">
             <rich-text class="content-text" :nodes="item.content"></rich-text>
@@ -43,6 +43,13 @@ export default class HomeNotificationListPage extends Vue {
     this.asyncFetchHomeNotificationListInfo().then(res => {
       // console.log(res)
       this.renderInfo = res.DATA.rows;
+    })
+  }
+
+  openNotiInfoPage(info: any) {
+    this.$navigateModel.navigateTo({
+      url: '/pagesA/notification-list/detail',
+      query: {id: info.id, type: 'asyncFetchHomeNotiDetailInfo'}
     })
   }
 }

@@ -10,8 +10,8 @@
       </view>
       <scroll-view scroll-x="true">
         <view class="home-news-content">
-          <view class="home-news-item" v-for="item in renderInfo" :key="item.id">
-            <image class="news-image" mode="widthFix" :src="item.image"></image>
+          <view class="home-news-item" v-for="(item, index) in renderInfo" :key="index" @click="openNewsInfoPage(item)">
+            <image class="news-image" mode="aspectFill" :src="item.image"></image>
             <text class="label-text">{{item.title}}</text>
             <rich-text class="value-text" :nodes="item.content"></rich-text>
           </view>
@@ -53,6 +53,15 @@ export default class HomeNewsComponent extends Vue {
       url: '/pagesA/news-list/index'
     })
   }
+
+  // 详情
+  public openNewsInfoPage(info: any) {
+    this.$navigateModel.navigateTo({
+      url: '/pagesA/news-list/detail',
+      query: {id: info.id, type: 'asyncFetchHomeNewsDetailInfo'}
+    })
+  }
+  
 }
 </script>
 

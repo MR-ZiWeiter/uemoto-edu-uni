@@ -275,17 +275,17 @@ const store = new Vuex.Store({
       // return getters.appStatus.appAuthorSetting[key]
     },
     /* 统一登录 */
-    async wechatLogin({ commit, state, dispatch }) {
+    async unifyLogin({ commit, state, dispatch }) {
       /* H5端微信/浏览器 */
       /* #ifdef H5 */
       if (state.coreTools.isWeiXin()) {
-        const localUrl = encodeURIComponent(window.location.href)
-        const redirectUrl = encodeURIComponent(`${apiConfig.staticUrl}/pages/auto-login/index?redirectUrl=${localUrl}`)
+        const localUrl = encodeURIComponent(window.location.href);
+        const redirectUrl = encodeURIComponent(`${apiConfig.staticUrl}/pages/auto-login/index?redirectUrl=${localUrl}`);
         // redirectUrl
-        window.location.href = `${apiConfig.apiBaseUrl}/user/wx/mp/auth/oauth2?callBackUrl=${redirectUrl}`
-        console.log(`${apiConfig.apiBaseUrl}/user/wx/mp/auth/oauth2?callBackUrl=${redirectUrl}`)
+        window.location.href = `${apiConfig.apiBaseUrl}/user/wx/mp/auth/oauth2?callBackUrl=${redirectUrl}`;
+        console.log(`${apiConfig.apiBaseUrl}/user/wx/mp/auth/oauth2?callBackUrl=${redirectUrl}`);
       } else {
-        console.log('非Weixin内部')
+        console.log('非Weixin内部');
       }
       /* #endif */
       /* 微信小程序 */
@@ -298,28 +298,21 @@ const store = new Vuex.Store({
           // console.log('状态' + status)
           if (status) {
             // 当用户第二次进入小程序APP
-            // this.UPDATA_USER_BASIC_INFO({ status: true })
-            uni.getUserInfo({
-              success: res => {
-                // console.log(res)
-                dispatch('asyncAccountMinLogin', { ...res, isLogin: 2 })
-              }
-            })
-            // this.userLogin()
+            dispatch('asyncAccountMinLogin');
           } else {
             // 如果没有权限 则清除token登录状态
-            commit('UPDATA_ANTHOR_TOKEN', null)
+            commit('UPDATA_ANTHOR_TOKEN', null);
             // 清空用户信息状态
-            commit('UPDATA_USER_BASIC_INFO', { deep: true, value: {status} })
+            commit('UPDATA_USER_BASIC_INFO', { deep: true, value: { status }});
             /* 登录账户 */
             // dispatch('asyncAccountMinLogin')
             /* 跳转登录界面 */
             uni.navigateTo({
-              url: '/pagesB/user/account/login/index'
-            })
+              url: '/pages/start/index'
+            });
           }
-        })
-      })
+        });
+      });
       /* #endif */
     },
     /* 刷新Token */
@@ -340,13 +333,13 @@ const store = new Vuex.Store({
             },
             fail: (err: any) => {
               console.log(err)
-              dispatch('wechatLogin')
+              dispatch('unifyLogin')
               reject(err)
             }
           })
         })
       } else {
-        dispatch('wechatLogin')
+        dispatch('unifyLogin')
       }
     },
     /* 退出登录 */
