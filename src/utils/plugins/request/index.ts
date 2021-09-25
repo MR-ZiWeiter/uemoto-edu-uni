@@ -116,6 +116,9 @@ class httpRequestPlugin extends CoreToolsFunction {
             // _self.login(backpage, backtype)
             // 重新授权登录
             console.log('需要登录')
+            if (!uni.getStorageSync('redict-url')) {
+              uni.setStorageSync('redict-url', (getCurrentPages()[0] as any).$page.fullPath || ('/' + getCurrentPages()[0].route));
+            }
             // uni.showModal({
             //   title: '提示',
             //   content: '用户验证失败，是否重新登录',
@@ -146,6 +149,8 @@ class httpRequestPlugin extends CoreToolsFunction {
                   }
                 }
               })
+            } else {
+              uni.setStorageSync('reload_model', false);
             }
             // 暂时回调错误
             // tslint:disable-next-line: no-unused-expression

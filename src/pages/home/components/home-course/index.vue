@@ -56,7 +56,7 @@ export default class HomeCourseComponent extends Vue {
   }
 
   public openCoursePage() {
-    this.$navigateModel.navigateTo({
+    this.$navigateModel.switchTab({
       url: '/pages/course/index'
     })
   }

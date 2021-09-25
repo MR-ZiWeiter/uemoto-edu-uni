@@ -122,12 +122,22 @@ export default class LayoutHeaderComponent extends Vue {
             error: () => {
               const currentPages = getCurrentPages()
               console.log(currentPages)
+              this.$navigateModel.switchTab({
+                url: '/pages/home/index'
+              })
             }
           })
           break
         case 2:
           this.$navigateModel.redirectTo({
-            url: this.url
+            url: this.url,
+            error: () => {
+              const currentPages = getCurrentPages()
+              console.log(currentPages)
+              this.$navigateModel.switchTab({
+                url: '/pages/home/index'
+              })
+            }
           })
           break
         case 3:

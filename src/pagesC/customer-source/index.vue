@@ -16,18 +16,18 @@
     <scroll-view class="context" scroll-y="true">
       <view class="content-box">
         <block v-for="item in renderInfo.rows" :key="item.id">
-          <view class="anthor-item" v-if="item.balanceChangeType === typeSelect">
+          <view class="anthor-item">
             <view class="anthor-info">
-              <image src="" class="anthor-image"/>
+              <image :src="item.avatarUrl" class="anthor-image" mode="aspectFill"/>
             </view>
             <view class="label-info">
-              <text class="label-text">Icey</text>
-              <text class="phone-text">18306668267</text>
-              <text class="value-text">领取时间：2020/12/30 10:00:00</text>
+              <text class="label-text">{{item.nickName}}({{item.userName}})</text>
+              <text class="phone-text">{{item.phoneNo || '暂无手机号'}}</text>
+              <text class="value-text">领取时间：{{item.inviteTime}}</text>
             </view>
           </view>
         </block>
-        <view class="content-null" v-if="!renderInfo.rows.length">
+        <view class="content-null" v-if="!renderInfo.rows && !renderInfo.rows.length">
           <text class="label-text">暂无数据</text>
         </view>
       </view>
@@ -84,17 +84,17 @@ export default class FundingPage extends Vue {
 
   onLoad(options: any) {
     // this.renderConfig.productId = options.id;
-    // this.onRenderInfo();
     if (options.type === 'customer-source') {
       this.typeSelect = '01';
     } else {
       this.typeSelect = '02'
     }
+    this.onRenderInfo();
   }
 
   public onRenderInfo() {
     this[this.typeSelect === '01' ? 'asyncFetchCustomerSourceInfo' : 'asyncFetchCustomerSourceUseInfo']().then(res => {
-      // console.log(res);
+      console.log(res, '97');
       this.renderInfo = res.DATA;
     })
   }
@@ -151,22 +151,25 @@ export default class FundingPage extends Vue {
         }
         .anthor-item {
           @include wh(format(690), format(160));
-          @include flex-justify-align(space-around, flex-start);
+          @include flex-justify-align(space-around, center);
           background-color: $default_color;
           border-radius: format(16);
           // border-bottom: #F9F9F9;
           margin-bottom: format(26);
           padding: 0 format(26);
           .anthor-info {
-            @include wh(format(159), format(150));
+            @include wh(format(150), format(150));
             border-radius: 50%;
+            overflow: hidden;
           }
           .label-info {
             @include wh(100%, auto);
             @include flex-justify-align(center, flex-start);
             padding-left: format(60);
+            flex-direction: column;
             .label-text {
               @include sc(format(28), #1C222A);
+              margin-bottom: format(10);
             }
             .phone-text,
             .value-text {

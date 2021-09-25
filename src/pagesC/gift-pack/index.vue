@@ -12,8 +12,9 @@
     <scroll-view class="context" scroll-y="true" :style="{backgroundImage: `url(${renderInfo.image})`}">
       <view class="content-box">
         <view class="gift-pack-header">
-          <text class="label-text" v-if="isShare">分享价值3980元余额680元黑金卡和优惠券大礼包给好友</text>
-          <text class="label-text" v-else>{{renderInfo.description}}</text>
+          <text class="label-text" v-if="isShare && !isShareIn">分享价值3980元余额680元黑金卡和优惠券大礼包给好友</text>
+          <text class="label-text" v-else-if="!isShare && !isShareIn">好友给你送大礼包了</text>
+          <text class="label-text" v-else>已领取的礼包</text>
         </view>
         <view class="gift-pack-card">
           <image :src="renderInfo.imageUrl || $CoreTools.imageUrlToHostChange('/statics/images/user/user-gift-pack-card@2x.png')" @error="onImageError" class="gift-pack-card-image"/>
@@ -30,7 +31,7 @@
             <image :src="item.couponInfo.imageUrl || item.imageUrl" class="min-icon" />
             <view class="pack-item-info">
               <text class="title-text">{{item.couponInfo.title || item.title}}</text>
-              <text class="label-text">满{{item.couponInfo.discountMinimumConsume || item.discountMinimumConsume}}元可用</text>
+              <text class="label-text">满{{item.description || item.discountMinimumConsume}}元可用</text>
               <text class="label-text" v-if="item.couponInfo.expireDay">{{item.couponInfo.expireDay}}天后到期</text>
               <text class="label-text" v-else>{{item.expireDate}}前使用</text>
             </view>
@@ -45,8 +46,8 @@
         <view class="btn-share" v-if="isShare">
           <button class="label-text" open-type="share">立即分享</button>
         </view>
-        <view class="btn-in" v-if="!isShare && renderInfo.couponItems">
-          <view class="label-text" @click="openCourse()">立即使用</view>
+        <view class="btn-in" v-if="!isShare && renderInfo.couponItems && isShareIn">
+          <view class="label-text" @click="openCourse()">立即领取</view>
         </view>
       </view>
     </scroll-view>
@@ -62,13 +63,17 @@ import { mapActions, mapGetters } from 'vuex';
 @Component({
   computed: {
     ...mapGetters({
+      token: 'token',
       userBasicInfo: 'userBasicInfo'
     })
   },
   methods: {
     ...mapActions({
       asyncFetchCouponListInfo: 'asyncFetchCouponListInfo',
-      asyncFetchOdyCouponListInfo: 'asyncFetchOdyCouponListInfo'
+      asyncFetchOdyCouponListInfo: 'asyncFetchOdyCouponListInfo',
+      asyncFetchOdiedCouponListInfo: 'asyncFetchOdiedCouponListInfo',
+      asyncPostInReceiveCouponBag: 'asyncPostInReceiveCouponBag',
+      unifyLogin: 'unifyLogin'
     })
   }
 })
@@ -80,8 +85,11 @@ export default class GiftPackPage extends Vue {
 
   public typeSelect: string = '01';
 
+  // 是否为股东分享
   public isShare: boolean = false;
 
+  // 是否为普通用户领取
+  public isShareIn: boolean = false;
   public renderConfig: any = {
     appointmentTime: null,
     phoneNo: null,
@@ -98,6 +106,7 @@ export default class GiftPackPage extends Vue {
   }
 
   // VUEX
+  public token!: any;
   public userBasicInfo: any;
   @Watch('userBasicInfo', {deep: true, immediate: true}) private userBasicInfoChange(n: any) {
     // console.log(n);
@@ -108,6 +117,9 @@ export default class GiftPackPage extends Vue {
   }
   public asyncFetchCouponListInfo: (info?: any) => Promise<ApiResponseModel>;
   public asyncFetchOdyCouponListInfo: (info?: any) => Promise<ApiResponseModel>;
+  public asyncFetchOdiedCouponListInfo: (info?: any) => Promise<ApiResponseModel>;
+  public asyncPostInReceiveCouponBag: (info?: any) => Promise<ApiResponseModel>;
+  public unifyLogin: (info?: any) => Promise<ApiResponseModel>;
 
   // 设置分享
   onShareAppMessage(res: { from: string; target: any; }) {
@@ -118,8 +130,8 @@ export default class GiftPackPage extends Vue {
         imageUrl: this.renderConfig.imageUrl,
         content: this.renderConfig.description,
         desc: this.renderConfig.description,
-        query: `isShare=true&couponBagId=${this.shareConfig.couponBagId}&shareHolderUserId=${this.shareConfig.shareHolderUserId}`,
-        path: `/pages/start/index?isShare=true&couponBagId=${this.shareConfig.couponBagId}&shareHolderUserId=${this.shareConfig.shareHolderUserId}`,
+        query: `isShareIn=true&couponBagId=${this.shareConfig.couponBagId}&shareHolderUserId=${this.shareConfig.shareHolderUserId}`,
+        path: `/pagesC/gift-pack/index?isShareIn=true&couponBagId=${this.shareConfig.couponBagId}&shareHolderUserId=${this.shareConfig.shareHolderUserId}`,
         success: () => {
           this.toolsService.customToast('分享成功~');
         }
@@ -130,24 +142,39 @@ export default class GiftPackPage extends Vue {
       imageUrl: this.renderConfig.imageUrl,
       content: this.renderConfig.description,
       desc: this.renderConfig.description,
-      query: `isShare=true&couponBagId=${this.shareConfig.couponBagId}&shareHolderUserId=${this.shareConfig.shareHolderUserId}`,
-      path: `/pages/start/index?isShare=true&couponBagId=${this.shareConfig.couponBagId}&shareHolderUserId=${this.shareConfig.shareHolderUserId}`
+      query: `isShareIn=true&couponBagId=${this.shareConfig.couponBagId}&shareHolderUserId=${this.shareConfig.shareHolderUserId}`,
+      path: `/pagesC/gift-pack/index?isShareIn=true&couponBagId=${this.shareConfig.couponBagId}&shareHolderUserId=${this.shareConfig.shareHolderUserId}`
     }
   }
 
   onLoad(options: any) {
     // this.renderConfig.productId = options.id;
-    if (options.type === 'vip-share') {
-      this.isShare = true;
+    if (options.isShareIn) {
+      this.isShareIn = true;
+      uni.setStorageSync('can-pack-info', options);
+      this.onRenderInf('asyncFetchOdyCouponListInfo');
     } else {
-      this.isShare = false;
+      if (options.type === 'vip-share') {
+        this.onRenderInf('asyncFetchCouponListInfo');
+        this.isShare = true;
+      } else {
+        this.onRenderInf('asyncFetchOdiedCouponListInfo');
+        this.isShare = false;
+      }
     }
-    this.onRenderInf();
   }
 
-  public onRenderInf() {
-    this[this.userBasicInfo.isShareHolder === '01' ? 'asyncFetchCouponListInfo' : 'asyncFetchOdyCouponListInfo']().then(res => {
-      if (this.isShare) {
+  public onRenderInf(renderName: 'asyncFetchCouponListInfo' | 'asyncFetchOdyCouponListInfo' | 'asyncFetchOdiedCouponListInfo') {
+    // this.userBasicInfo.isShareHolder === '01' ? 'asyncFetchCouponListInfo' : 'asyncFetchOdyCouponListInfo'
+    if (renderName === 'asyncFetchCouponListInfo') {
+      this.title = '礼包分享';
+    } else if (renderName === 'asyncFetchOdyCouponListInfo') {
+      this.title = '领取大礼包';
+    } else if (renderName === 'asyncFetchOdiedCouponListInfo') {
+      this.title = '我的礼包';
+    }
+    this[renderName]().then(res => {
+      if (this.isShare || this.isShareIn) {
         this.renderInfo = res.DATA;
         this.shareConfig.couponBagId = res.DATA.couponBagId || null;
       } else {
@@ -161,8 +188,39 @@ export default class GiftPackPage extends Vue {
   }
 
   public openCourse() {
-    this.$navigateModel.switchTab({
-      url: '/pages/course/index'
+    // this.$navigateModel.switchTab({
+    //   url: '/pages/course/index'
+    // })
+    const options = uni.getStorageSync('can-pack-info');
+    if (!this.token) {
+      if (options && options.isShareIn) {
+        uni.setStorageSync('can-pack-info', options);
+        this.toolsService.customToast('授权登录小程序即可领取大礼包～');
+        if (!uni.getStorageSync('redict-url')) {
+          uni.setStorageSync('redict-url', (getCurrentPages()[0] as any).$page.fullPath || ('/' + getCurrentPages()[0].route));
+        }
+        this.unifyLogin().then(res => {
+          this.fetchPack(options);
+          this.onRenderInf('asyncFetchOdiedCouponListInfo');
+        })
+      } else {
+        this.toolsService.customToast('您当前不可领取该礼包~');
+      }
+    } else {
+      if (options && options.isShareIn) {
+        this.fetchPack(options);
+        this.onRenderInf('asyncFetchOdiedCouponListInfo');
+      } else {
+        this.toolsService.customToast('您当前不可领取该礼包~');
+      }
+    }
+  }
+
+  // 领取操作
+  public fetchPack(options: any) {
+    this.asyncPostInReceiveCouponBag(options).then(res => {
+      this.toolsService.customToast('领取成功');
+      uni.removeStorageSync('can-pack-info');
     })
   }
 }

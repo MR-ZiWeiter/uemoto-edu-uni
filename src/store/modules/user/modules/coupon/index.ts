@@ -31,8 +31,8 @@ export default {
         })
       })
     },
-    // 普通人获取卡包
-    async asyncFetchOdyCouponListInfo({commit, dispatch}: any, info: any) {
+    // 普通人获取已领取卡包
+    async asyncFetchOdiedCouponListInfo({commit, dispatch}: any, info: any) {
       return await new Promise((resolve, reject) => {
         new Vue.HttpRequest({
           url: '/couponBag/info/userCouponDetails',
@@ -53,6 +53,23 @@ export default {
       return await new Promise((resolve, reject) => {
         new Vue.HttpRequest({
           url: '/members/receiveCouponBag',
+          method: 'POST',
+          data: info,
+          success: (res: ApiResponseModel) => {
+            resolve(res)
+          },
+          fail: (err: any) => {
+            // console.log(err)
+            reject({ status: false, err })
+          }
+        })
+      })
+    },
+    // 普通会员卡包信息（需要卡包ID）
+    async asyncFetchOdyCouponListInfo({commit, dispatch}: any, info: any) {
+      return await new Promise((resolve, reject) => {
+        new Vue.HttpRequest({
+          url: '/couponBag/getCouponBagByCouponBagId',
           method: 'POST',
           data: info,
           success: (res: ApiResponseModel) => {

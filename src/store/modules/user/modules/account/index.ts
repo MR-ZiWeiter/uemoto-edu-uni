@@ -261,9 +261,23 @@ export default {
                   })
                   // 存储token时间
                   uni.setStorageSync('loginEndTime', failTime)
-                  uni.reLaunch({
-                    url: '/pages/home/index'
-                  })
+                  if (DATA.userInfo.phoneNo) {
+                    // 跳转
+                    if (uni.getStorageSync('redict-url')) {
+                      uni.reLaunch({ url: uni.getStorageSync('redict-url') })
+                      uni.removeStorageSync('redict-url')
+                    } else {
+                      uni.reLaunch({
+                        url: '/pages/home/index'
+                      })
+                    }
+                  } else {
+                    if ((getCurrentPages()[0] as any).$page.fullPath || ('/' + getCurrentPages()[0].route) !== '/pages/start/index') {
+                      uni.reLaunch({
+                        url: '/pages/start/index'
+                      })
+                    }
+                  }
                   resolve({ status: true, res: DATA });
                 },
                 fail: (err: any) => {
@@ -283,9 +297,61 @@ export default {
               icon: 'none',
               mask: true
             });
+            setTimeout(() => {
+              uni.reLaunch({
+                url: '/pages/start/index'
+              })
+            }, 2000);
           }
         });
         // #endif
+      });
+    },
+    // 小程序用户授权手机号码操作
+    async asyncAccountUserBindPhone({ commit, dispatch }: any, { encryptedData, iv }: any) {
+      return new Promise((resolve, reject) => {
+        // 用户登录操作
+        uni.login({
+          /* #ifdef MP-ALIPAY */
+          scopes: ['auth_base', 'auth_user', 'auth_zhima'],
+          /* #endif */
+          success: response => {
+            console.log(response);
+            if (response.errMsg === 'login:ok') {
+              new Vue.HttpRequest({
+                url: `/members/bindPhoneNo`,
+                method: 'POST',
+                data: {
+                  iv,
+                  encryptedData,
+                  code: response.code
+                },
+                success: (res: any) => {
+                  /* 更新TOKEN */
+                  // res.rel.token && commit('UPDATA_ANTHOR_TOKEN', res.rel.token);
+                  // 异步更新权限
+                  dispatch('asyncFetchAuthorInfo');
+                  // 异步更新用户信息
+                  dispatch('asyncFetchUserBasicInfo');
+                  // 跳转
+                  if (uni.getStorageSync('redict-url')) {
+                    uni.reLaunch({ url: uni.getStorageSync('redict-url') })
+                    uni.removeStorageSync('redict-url')
+                  } else {
+                    uni.reLaunch({
+                      url: '/pages/home/index'
+                    })
+                  }
+                  resolve({ status: true, res });
+                },
+                fail: (err: any) => {
+                  // console.log(err)
+                  reject({ status: false, err });
+                }
+              });
+            }
+          }
+        });
       });
     },
     // 获取用户会员信息

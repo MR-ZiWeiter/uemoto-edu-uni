@@ -81,7 +81,7 @@ export default {
           method: 'POST',
           data: info,
           success: (res: ApiResponseModel) => {
-            console.log(res)
+            console.log(res, '84')
             commit('UPDATA_USER_BASIC_INFO', {
               deep: false,
               value: res.DATA

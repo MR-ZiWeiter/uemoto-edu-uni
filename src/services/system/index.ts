@@ -276,4 +276,11 @@ export class SystemService {
     })
     /* #endif */
   }
+
+  // 打开拨号
+  public openCall(options: UniApp.MakePhoneCallOptions) {
+    uni.makePhoneCall({
+      ...options
+    })
+  }
 }

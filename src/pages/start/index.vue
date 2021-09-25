@@ -11,6 +11,7 @@
     <image
       class="logo-image" :src="imageUrlToHostChange('/statics/images/pages/start/start-page-logo@2x.png')" alt="logo"></image>
     <button
+      v-if="!token && !userBasicInfo.phoneNo"
       class="wechat-btn"
       open-type="getUserInfo"
       @click="openLoginEvent"
@@ -21,6 +22,17 @@
           :src="imageUrlToHostChange('/statics/images/pages/start/wx-icon.png')"
         ></image>
         <text class="wx-txt u-m-l-16">微信登录</text>
+      </view>
+      <!-- <image class="wechat-btn-image" :src="imageUrlToHostChange('/statics/images/pages/start/start-page-wecht-btn@2x.png')"></image> -->
+    </button>
+    <button
+      v-if="token && !userBasicInfo.phoneNo"
+      class="wechat-btn"
+      open-type="getPhoneNumber"
+      @getphonenumber="openPhoneLogin"
+    >
+      <view class="btns wx-btn">
+        <text class="wx-txt u-m-l-16">手机号一键登录</text>
       </view>
       <!-- <image class="wechat-btn-image" :src="imageUrlToHostChange('/statics/images/pages/start/start-page-wecht-btn@2x.png')"></image> -->
     </button>
@@ -51,7 +63,8 @@ import { ToolsService } from "@/services/tools";
     ...mapActions({
       asyncAccountMinLogin: "asyncAccountMinLogin",
       asyncFetchHomeSelectCar: "asyncFetchHomeSelectCar",
-      asyncPostInReceiveCouponBag: "asyncPostInReceiveCouponBag"
+      asyncPostInReceiveCouponBag: "asyncPostInReceiveCouponBag",
+      asyncAccountUserBindPhone: "asyncAccountUserBindPhone"
     }),
   },
 })
@@ -68,16 +81,17 @@ export default class HomePage extends Vue {
 
   private asyncAccountMinLogin: (info?: any) => Promise<ApiResponseModel>;
   private asyncPostInReceiveCouponBag: (info: any) => Promise<ApiResponseModel>;
+  private asyncAccountUserBindPhone: (info: any) => Promise<ApiResponseModel>;
 
   async onLoad(options: any) {
     // console.log(options, '68');
-    if (!this.token) {
-      if (options && options.isShare) {
+    if (!this.token || !this.userBasicInfo.phoneNo) {
+      if (options && options.isShareIn) {
         uni.setStorageSync('can-pack-info', options);
         this.toolsService.customToast('授权登录小程序即可领取大礼包～');
       }
     } else {
-      if (options && options.isShare) {
+      if (options && options.isShareIn) {
         this.asyncPostInReceiveCouponBag(options).then(res => {
           this.toolsService.customToast('领取成功');
           uni.removeStorageSync('can-pack-info');
@@ -137,6 +151,19 @@ export default class HomePage extends Vue {
     //   console.log(e.detail)
     //   this.asyncAccountMinLogin(e.detail)
     // }
+  }
+
+  public openPhoneLogin(ev: any) {
+    // console.log(ev);
+    if (ev.detail.errMsg === 'getPhoneNumber:ok') {
+      const { encryptedData, iv } = ev.detail;
+      this.asyncAccountUserBindPhone({
+        encryptedData,
+        iv
+      }).then(res => {
+        console.log(res);
+      });
+    }
   }
 
   /* 页面销毁时构造函数 */

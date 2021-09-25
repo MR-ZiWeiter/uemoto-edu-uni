@@ -24,17 +24,19 @@
         <view class="group">
           <view class="cell-item">
             <text class="label-text">真实姓名</text>
-            <input class="value-input" :readonly="userBasicInfo.userName" :disabled="userBasicInfo.userName" type="text" placeholder="请输入真实姓名" v-model="renderConfig.userName" />
+            <!--  :readonly="userBasicInfo.userName" :disabled="userBasicInfo.userName" -->
+            <input class="value-input" type="text" placeholder="请输入真实姓名" v-model="renderConfig.userName" />
           </view>
           <view class="cell-item">
             <text class="label-text">手机</text>
-            <input class="value-input" :readonly="userBasicInfo.phoneNo" :disabled="userBasicInfo.phoneNo" type="tel" placeholder="请输入手机号码" maxlength="11" max="19999999999" v-model="renderConfig.phoneNo"/>
+            <!--  :readonly="userBasicInfo.phoneNo" :disabled="userBasicInfo.phoneNo" -->
+            <input class="value-input" type="tel" :readonly="userBasicInfo.phoneNo" :disabled="userBasicInfo.phoneNo" placeholder="请输入手机号码" maxlength="11" max="19999999999" v-model="renderConfig.phoneNo"/>
           </view>
         </view>
         <text class="desc-info-text">请认真填写，资料一经完善不可修改。</text>
       </view>
     </scroll-view>
-    <view class="submit-btn" v-if="!userBasicInfo.userName || !userBasicInfo.phoneNo">
+    <view class="submit-btn">
       <view class="change-info" @click="changeInfo">确定</view>
     </view>
   </view>

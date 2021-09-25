@@ -75,7 +75,7 @@
       </view>
     </scroll-view>
     <view class="contact-info">
-      <view class="contact-us">
+      <view class="contact-us" @click.stop="openCall()">
         <image class="contact-us-image" :src="$CoreTools.imageUrlToHostChange('/statics/svgs/course/course-phone-icon-01@2x.svg')"/>
         <text class="contact-us-text">联系我们</text>
       </view>
@@ -88,13 +88,15 @@
 </template>
 
 <script lang="ts">
+import { SystemService } from '@/services/system';
 import Vue from 'vue';
 import { Component, } from 'vue-property-decorator';
 import { mapActions } from 'vuex';
 @Component({
   methods: {
     ...mapActions({
-      asyncFetchProductInfo: 'asyncFetchProductInfo'
+      asyncFetchProductInfo: 'asyncFetchProductInfo',
+      asyncFetchHomeInstitutionInfo: 'asyncFetchHomeInstitutionInfo'
     })
   }
 })
@@ -102,8 +104,12 @@ export default class CourseInfoPage extends Vue {
   public title: string = '课程详情';
   // 课程详情
   public renderInfo: any = {};
+  // 学校信息
+  public schoolInfo: any = {};
+  private systemService = new SystemService();
   // VUEX
   public asyncFetchProductInfo: (info: any) => Promise<ApiResponseModel>;
+  public asyncFetchHomeInstitutionInfo: (info?: any) => Promise<ApiResponseModel>;
 
   onLoad(options: any) {
     this.onRenderInfo(options.id);
@@ -112,6 +118,10 @@ export default class CourseInfoPage extends Vue {
   private onRenderInfo(productNo: string) {
     this.asyncFetchProductInfo({productNo}).then(res => {
       this.renderInfo = res.DATA;
+    })
+    this.asyncFetchHomeInstitutionInfo().then(res => {
+      // console.log(res)
+      this.schoolInfo = res.DATA;
     })
   }
   public openCourseInfoPage(info: any) {
@@ -125,6 +135,11 @@ export default class CourseInfoPage extends Vue {
     this.$navigateModel.navigateTo({
       url: '/pagesB/reserve-info/index',
       query: {id: this.renderInfo.productNo}
+    })
+  }
+  public openCall() {
+    this.systemService.openCall({
+      phoneNumber: this.schoolInfo.phoneNo
     })
   }
 }
