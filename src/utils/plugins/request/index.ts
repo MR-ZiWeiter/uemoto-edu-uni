@@ -116,8 +116,8 @@ class httpRequestPlugin extends CoreToolsFunction {
             // _self.login(backpage, backtype)
             // 重新授权登录
             console.log('需要登录')
-            if (!uni.getStorageSync('redict-url')) {
-              uni.setStorageSync('redict-url', (getCurrentPages()[0] as any).$page.fullPath || ('/' + getCurrentPages()[0].route));
+            if (!uni.getStorageSync('redirect-url')) {
+              uni.setStorageSync('redirect-url', '/' + getCurrentPages()[0].route);
             }
             // uni.showModal({
             //   title: '提示',

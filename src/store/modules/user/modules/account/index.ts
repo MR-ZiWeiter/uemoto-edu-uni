@@ -263,9 +263,9 @@ export default {
                   uni.setStorageSync('loginEndTime', failTime)
                   if (DATA.userInfo.phoneNo) {
                     // 跳转
-                    if (uni.getStorageSync('redict-url')) {
-                      uni.reLaunch({ url: uni.getStorageSync('redict-url') })
-                      uni.removeStorageSync('redict-url')
+                    if (uni.getStorageSync('redirect-url')) {
+                      uni.reLaunch({ url: uni.getStorageSync('redirect-url') })
+                      uni.removeStorageSync('redirect-url')
                     } else {
                       uni.reLaunch({
                         url: '/pages/home/index'
@@ -334,9 +334,9 @@ export default {
                   // 异步更新用户信息
                   dispatch('asyncFetchUserBasicInfo');
                   // 跳转
-                  if (uni.getStorageSync('redict-url')) {
-                    uni.reLaunch({ url: uni.getStorageSync('redict-url') })
-                    uni.removeStorageSync('redict-url')
+                  if (uni.getStorageSync('redirect-url')) {
+                    uni.reLaunch({ url: uni.getStorageSync('redirect-url') })
+                    uni.removeStorageSync('redirect-url')
                   } else {
                     uni.reLaunch({
                       url: '/pages/home/index'

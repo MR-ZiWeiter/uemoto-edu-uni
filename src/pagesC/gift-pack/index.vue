@@ -196,8 +196,8 @@ export default class GiftPackPage extends Vue {
       if (options && options.isShareIn) {
         uni.setStorageSync('can-pack-info', options);
         this.toolsService.customToast('授权登录小程序即可领取大礼包～');
-        if (!uni.getStorageSync('redict-url')) {
-          uni.setStorageSync('redict-url', (getCurrentPages()[0] as any).$page.fullPath || ('/' + getCurrentPages()[0].route));
+        if (!uni.getStorageSync('redirect-url')) {
+          uni.setStorageSync('redirect-url', (getCurrentPages()[0] as any).$page.fullPath || ('/' + getCurrentPages()[0].route));
         }
         this.unifyLogin().then(res => {
           this.fetchPack(options);
